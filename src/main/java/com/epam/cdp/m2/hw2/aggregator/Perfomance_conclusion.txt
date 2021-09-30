@@ -1,0 +1,22 @@
+1_000_000 ELEMENTS:
+
+class com.epam.cdp.m2.hw2.aggregator.Java7Aggregator(Sum) - 16 Millis
+class com.epam.cdp.m2.hw2.aggregator.Java7ParallelAggregator(Sum) - 34 Millis
+class com.epam.cdp.m2.hw2.aggregator.Java8Aggregator(Sum) - 16 Millis
+class com.epam.cdp.m2.hw2.aggregator.Java8ParallelAggregator(Sum) - 31 Millis
+========================================================================================
+1_000_000 ELEMENTS:
+
+class com.epam.cdp.m2.hw2.aggregator.Java7Aggregator(Frequency) - 157 Millis
+class com.epam.cdp.m2.hw2.aggregator.Java7ParallelAggregator(Frequency) -
+class com.epam.cdp.m2.hw2.aggregator.Java8Aggregator(Frequency) - 266 Millis
+class com.epam.cdp.m2.hw2.aggregator.Java8ParallelAggregator(Frequency) - 265 Millis
+========================================================================================
+10_000 ELEMENTS:
+
+class com.epam.cdp.m2.hw2.aggregator.Java7Aggregator(Duplicates) - 126 Millis
+class com.epam.cdp.m2.hw2.aggregator.Java7ParallelAggregator(Duplicates) -
+class com.epam.cdp.m2.hw2.aggregator.Java8Aggregator(Duplicates) - 16 Millis
+class com.epam.cdp.m2.hw2.aggregator.Java8ParallelAggregator(Duplicates) - 32 Millis
+========================================================================================
+
