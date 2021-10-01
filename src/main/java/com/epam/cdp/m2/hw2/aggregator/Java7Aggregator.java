@@ -36,9 +36,10 @@ public class Java7Aggregator implements Aggregator {
     public List<String> getDuplicates(List<String> words, long limit) {
         List<String> duplicates = new ArrayList<>();
         for (String word : words) {
+
             String str = word.toUpperCase();
-            char firstChar = str.charAt(0);
-            String newString = str.replaceAll(String.valueOf(firstChar), " ").trim();
+            String newString = str.replaceAll(String.valueOf(str.charAt(0)), " ").trim();
+
             if (!duplicates.contains(str) && str.length() > 1 && newString.length() > 0) {
                 duplicates.add(str);
             }
