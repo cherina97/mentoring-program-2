@@ -2,48 +2,87 @@ package com.epam.cdp.m2.hw2.aggregator;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javafx.util.Pair;
 
 public class Java7ParallelAggregator implements Aggregator {
 
-    private static final int THREADS = Runtime.getRuntime().availableProcessors();
-    private Integer sum = 0;
+    private static final int THREADS = Runtime.getRuntime().availableProcessors() - 1;
 
     @Override
     public int sum(List<Integer> numbers) {
-        ExecutorService executorService = Executors.newFixedThreadPool(THREADS);
-        List<Future<Integer>> tasks = new ArrayList<>();
+        ForkJoinPool forkJoinPool = new ForkJoinPool();
+        return forkJoinPool.invoke(new SumRecursive(numbers, 0, numbers.size()));
+    }
 
-        for (int i = 0; i < THREADS; i++) {
-            int step = i;
+    static class SumRecursive extends RecursiveTask<Integer> {
 
-            tasks.add(executorService.submit(new Callable<Integer>() {
-                public Integer call() {
-                    int partSum = 0;
-                    for (int j = step; j < numbers.size(); j += THREADS) {
-                        partSum += numbers.get(j);
-                    }
-                    return partSum;
-                }
-            }));
+        private static final int THRESHOLD = 5_000;
+        private final List<Integer> list;
+        private final int begin;
+        private final int end;
+
+        public SumRecursive(List<Integer> list, int begin, int end) {
+            this.list = list;
+            this.begin = begin;
+            this.end = end;
         }
 
-        for (Future<Integer> task : tasks) {
-            try {
-                sum += task.get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+        @Override
+        protected Integer compute() {
+            if ((end - begin) < THRESHOLD) {
+                int sum = 0;
+                for (int i = begin; i < end; i++) {
+                    sum += list.get(i);
+                }
+                return sum;
+            } else {
+                int mid = end + (begin - end) / 2;
+                SumRecursive left = new SumRecursive(list, begin, mid);
+                SumRecursive right = new SumRecursive(list, mid, end);
+                left.fork();
+                Integer rightAns = right.compute();
+                Integer leftAns = left.join();
+
+                return rightAns + leftAns;
             }
         }
-        return sum;
     }
+
+
+//        ExecutorService executorService = Executors.newFixedThreadPool(THREADS);
+//        List<Future<Integer>> tasks = new ArrayList<>();
+//
+//        for (int i = 0; i < THREADS; i++) {
+//            int step = i;
+//
+//            tasks.add(executorService.submit(new Callable<Integer>() {
+//                public Integer call() {
+//                    int partSum = 0;
+//                    for (int j = step; j < numbers.size(); j += THREADS) {
+//                        partSum += numbers.get(j);
+//                    }
+//                    return partSum;
+//                }
+//            }));
+//        }
+//
+//        for (Future<Integer> task : tasks) {
+//            try {
+//                sum += task.get();
+//            } catch (InterruptedException | ExecutionException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return sum;
 
 
     @Override
     public List<Pair<String, Long>> getMostFrequentWords(List<String> words, long limit) {
         ExecutorService executorService = Executors.newFixedThreadPool(THREADS);
-        List<Pair<String, Long>> pairList = new ArrayList<>();
+        List<Pair<String, Long>> pairList = Collections.synchronizedList(new ArrayList<>());
+        ReentrantLock lock = new ReentrantLock();
 
         ConcurrentHashMap<String, Long> wordsFrequencies = new ConcurrentHashMap<>();
 
@@ -52,9 +91,13 @@ public class Java7ParallelAggregator implements Aggregator {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
+                    lock.lock();
                     for (int j = step; j < words.size(); j += THREADS) {
-                        wordsFrequencies.put(words.get(j), wordsFrequencies.containsKey(words.get(j)) ? wordsFrequencies.get(words.get(j)) + 1 : 1);
+                        wordsFrequencies.put(words.get(j), wordsFrequencies.containsKey(words.get(j))
+                                ? wordsFrequencies.get(words.get(j)) + 1
+                                : 1);
                     }
+                    lock.unlock();
                 }
             });
         }
@@ -86,6 +129,7 @@ public class Java7ParallelAggregator implements Aggregator {
     public List<String> getDuplicates(List<String> words, long limit) {
         ExecutorService executorService = Executors.newFixedThreadPool(THREADS);
         List<String> duplicates = new ArrayList<>();
+        ReentrantLock lock = new ReentrantLock();
 
         for (int i = 0; i < THREADS; i++) {
             executorService.execute(new Runnable() {
@@ -96,9 +140,12 @@ public class Java7ParallelAggregator implements Aggregator {
                         String str = word.toUpperCase();
                         String newString = str.replaceAll(String.valueOf(str.charAt(0)), " ").trim();
 
+                        lock.lock();
                         if (!duplicates.contains(str) && str.length() > 1 && newString.length() > 0) {
                             duplicates.add(str);
                         }
+                        lock.unlock();
+
                     }
                 }
             });
