@@ -1,4 +1,4 @@
-package task1;
+package com.epam.learn.multithreading.task1;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ import java.util.concurrent.CountDownLatch;
  * Provide a simple report to your mentor.
  */
 
-public class Main {
+public class Task1 {
     public static void main(String[] args) throws InterruptedException {
         //ConcurrentModificationException with using HashMap
         //there is no ConcurrentModificationException, but result is not true

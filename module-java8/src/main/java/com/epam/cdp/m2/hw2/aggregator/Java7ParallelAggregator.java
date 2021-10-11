@@ -18,7 +18,7 @@ public class Java7ParallelAggregator implements Aggregator {
 
     static class SumRecursive extends RecursiveTask<Integer> {
 
-        private static final int THRESHOLD = 5_000;
+        private static final int THRESHOLD = 5;
         private final List<Integer> list;
         private final int begin;
         private final int end;

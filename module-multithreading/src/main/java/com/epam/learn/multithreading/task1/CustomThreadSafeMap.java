@@ -1,4 +1,4 @@
-package task1;
+package com.epam.learn.multithreading.task1;
 
 import java.util.Collection;
 import java.util.HashSet;

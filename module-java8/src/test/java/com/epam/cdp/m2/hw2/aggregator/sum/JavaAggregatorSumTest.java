@@ -34,10 +34,10 @@ public abstract class JavaAggregatorSumTest {
         data.add(new Object[]{emptyList(), 0});
 
         List<Integer> list = new ArrayList<>();
-        for (int i = 0; i <= 1_000_000; i++) {
+        for (int i = 0; i <= 20_000_000; i++) {
             list.add(i);
         }
-        data.add(new Object[]{list, 1784293664});
+        data.add(new Object[]{list, 562894464});
 
         return data;
     }

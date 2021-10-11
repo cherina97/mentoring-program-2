@@ -1,4 +1,4 @@
-package task2;
+package com.epam.learn.multithreading.task2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * 3rd is printing square root of sum of squares of all numbers in the collection.
  * Make these calculations thread-safe using synchronization block. Fix the possible deadlock.
  */
-public class Main {
+public class Task2 {
     public static void main(String[] args) throws InterruptedException {
         run();
     }
