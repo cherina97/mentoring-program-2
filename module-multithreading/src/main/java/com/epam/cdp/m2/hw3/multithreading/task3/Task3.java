@@ -1,4 +1,4 @@
-package com.epam.learn.multithreading.task3;
+package com.epam.cdp.m2.hw3.multithreading.task3;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;

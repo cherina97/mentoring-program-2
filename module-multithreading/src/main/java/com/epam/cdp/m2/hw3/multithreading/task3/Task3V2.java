@@ -1,4 +1,4 @@
-package com.epam.learn.multithreading.task3;
+package com.epam.cdp.m2.hw3.multithreading.task3;
 
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -23,7 +23,7 @@ public class Task3V2 {
 
         Thread consumer = new Thread(() -> {
             try {
-                while (true) {
+                for (int i = 0; i < COUNT_OF_MASSAGE; i++) {
                     producerConsumer.consume();
                 }
             } catch (InterruptedException e) {
@@ -34,8 +34,8 @@ public class Task3V2 {
         producer.start();
         consumer.start();
 
-        producer.join();
         consumer.join();
+        producer.join();
     }
 
     public static class ProducerConsumer {

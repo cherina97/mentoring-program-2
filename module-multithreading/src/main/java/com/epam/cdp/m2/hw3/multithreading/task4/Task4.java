@@ -1,4 +1,4 @@
-package com.epam.learn.multithreading.task4;
+package com.epam.cdp.m2.hw3.multithreading.task4;
 
 public class Task4 {
     public static void main(String[] args) throws InterruptedException {

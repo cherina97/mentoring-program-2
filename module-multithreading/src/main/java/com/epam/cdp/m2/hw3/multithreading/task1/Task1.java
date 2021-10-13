@@ -1,4 +1,4 @@
-package com.epam.learn.multithreading.task1;
+package com.epam.cdp.m2.hw3.multithreading.task1;
 
 import java.util.HashMap;
 import java.util.Map;
