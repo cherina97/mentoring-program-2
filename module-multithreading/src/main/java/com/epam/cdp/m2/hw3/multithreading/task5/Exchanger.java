@@ -5,7 +5,6 @@ import com.epam.cdp.m2.hw3.multithreading.task5.dao.UserDaoImpl;
 import com.epam.cdp.m2.hw3.multithreading.task5.model.Currency;
 import com.epam.cdp.m2.hw3.multithreading.task5.model.UserAccount;
 import com.epam.cdp.m2.hw3.multithreading.task5.service.ExchangeService;
-import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.util.EnumMap;
