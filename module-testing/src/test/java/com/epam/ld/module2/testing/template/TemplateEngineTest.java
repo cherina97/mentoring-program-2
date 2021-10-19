@@ -34,4 +34,13 @@ public class TemplateEngineTest {
         assertEquals("Some text: #{value}", value);
     }
 
+    @Test
+    public void messageShouldBeFromTemplate(){
+        TemplateEngine templateEngine = new TemplateEngine();
+        Template template = new Template();
+        String message = templateEngine.generateMessage(template, new Client());
+
+        assertEquals(template.getValue(), message);
+    }
+
 }
