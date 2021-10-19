@@ -14,6 +14,6 @@ public class TemplateEngine {
      * @return the string
      */
     public String generateMessage(Template template, Client client) {
-        return null;
+        return "";
     }
 }
