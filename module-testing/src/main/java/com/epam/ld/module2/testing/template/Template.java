@@ -5,7 +5,7 @@ package com.epam.ld.module2.testing.template;
  */
 public class Template {
 
-    public String getValue(){
+    public String getMessage(){
         return "Some text: #{value}";
     }
 }

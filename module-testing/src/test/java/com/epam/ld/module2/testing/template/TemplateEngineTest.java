@@ -29,7 +29,7 @@ public class TemplateEngineTest {
     @Test
     public void templateShouldReturnValue(){
         Template template = new Template();
-        String value = template.getValue();
+        String value = template.getMessage();
 
         assertEquals("Some text: #{value}", value);
     }
@@ -40,7 +40,7 @@ public class TemplateEngineTest {
         Template template = new Template();
         String message = templateEngine.generateMessage(template, new Client());
 
-        assertEquals(template.getValue(), message);
+        assertEquals(template.getMessage(), message);
     }
 
 }
