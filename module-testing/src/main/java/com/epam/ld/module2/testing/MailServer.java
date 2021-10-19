@@ -5,6 +5,12 @@ package com.epam.ld.module2.testing;
  */
 public class MailServer {
 
+    private String messageSent;
+
+    public String getMessageSent() {
+        return messageSent;
+    }
+
     /**
      * Send notification.
      *
@@ -12,5 +18,7 @@ public class MailServer {
      * @param messageContent the message content
      */
     public void send(String addresses, String messageContent) {
+//        System.out.print(messageContent);
+        this.messageSent = messageContent;
     }
 }

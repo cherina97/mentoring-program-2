@@ -1,50 +1,62 @@
 package com.epam.ld.module2.testing.template;
 
 import com.epam.ld.module2.testing.Client;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import com.epam.ld.module2.testing.MailServer;
+import com.epam.ld.module2.testing.Messenger;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.*;
 
 public class TemplateEngineTest {
+
     private TemplateEngine templateEngine;
+    private Client client;
     private Template template;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         templateEngine = new TemplateEngine();
+        client = new Client();
         template = new Template();
+
+        Map<String, String> map = new HashMap<>();
+        client.setData(map);
+        template.setTemplate("template message");
     }
 
     @Test
     public void messageCantBeNull() {
-        String message = templateEngine.generateMessage(new Template(), new Client());
+        String message = templateEngine.generateMessage(template, client);
 
-        assertNotNull(message);
+        Assertions.assertNotNull(message);
     }
 
     @Test
     public void messageCantBeEmpty() {
-        String message = templateEngine.generateMessage(new Template(), new Client());
+        String message = templateEngine.generateMessage(template, client);
 
-        assertThat(message, not(isEmptyString()));
+        MatcherAssert.assertThat(message, not(isEmptyString()));
     }
 
     @Test
     public void templateShouldReturnValue() {
-        String value = template.getMessage();
+        String value = template.getTemplate();
 
-        assertEquals("Some text: #{value}", value);
+        Assertions.assertEquals("template message", value);
     }
 
     @Test
     public void messageShouldBeFromTemplate() {
-        String message = templateEngine.generateMessage(template, new Client());
+        String message = templateEngine.generateMessage(template, client);
 
-        assertEquals(template.getMessage(), message);
+        Assertions.assertEquals(template.getTemplate(), message);
     }
 
 }
