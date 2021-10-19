@@ -26,4 +26,12 @@ public class TemplateEngineTest {
         assertThat(message, not(isEmptyString()));
     }
 
+    @Test
+    public void templateShouldReturnValue(){
+        Template template = new Template();
+        String value = template.getValue();
+
+        assertEquals("Some text: #{value}", value);
+    }
+
 }
