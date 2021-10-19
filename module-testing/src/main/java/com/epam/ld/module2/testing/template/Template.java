@@ -6,6 +6,6 @@ package com.epam.ld.module2.testing.template;
 public class Template {
 
     public String getValue(){
-        return null;
+        return "Some text: #{value}";
     }
 }
