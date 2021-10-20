@@ -20,4 +20,9 @@ public class Template {
     public void setTemplate(String template) {
         this.template = template;
     }
+
+    public String getDefaultTemplate() {
+        return "Dear #{NAME}, this is massage about #{EVENT} notification";
+    }
+
 }

@@ -1,13 +1,37 @@
 package com.epam.ld.module2.testing.template;
 
 import com.epam.ld.module2.testing.Client;
+import org.apache.commons.text.StringSubstitutor;
 
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * The type Template engine.
  */
 public class TemplateEngine {
+
+    Logger logger = Logger.getLogger(String.valueOf(TemplateEngine.class));
+
+    public static void main(String[] args) {
+        TemplateEngine templateEngine = new TemplateEngine();
+        Client client = new Client();
+        Template template = new Template();
+
+        template.setTemplate("Dear #{NAME}, this is massage about #{EVENT} notification");
+        Map<String, String> map = new HashMap<>();
+        client.setData(map);
+
+        System.out.println(templateEngine.generateMessage(template, client));
+    }
+
     /**
      * Generate message string.
      *
@@ -16,14 +40,22 @@ public class TemplateEngine {
      * @return the string
      */
     public String generateMessage(Template template, Client client) {
-        final String[] message = {template.getTemplate()};
-        Map<String, String> data = client.getData();
+        String inputTemplate = template.getTemplate();
 
-        data.forEach((key, value) -> {
-            String pattern = "#\\{" + key + "}";
-            message[0] = message[0].replaceAll(pattern, value);
-        });
+        String regexp = "#\\{(.+?)}";
+        Pattern pattern = Pattern.compile(regexp);
+        Matcher matcher = pattern.matcher(inputTemplate);
+        Scanner scanner = new Scanner(System.in);
 
-        return message[0];
+        Map<String, String> inputMap = client.getData();
+
+        //todo add validation
+        while (matcher.find()) {
+            logger.info("Please enter " + matcher.group(1).toLowerCase() + " :");
+            inputMap.put(matcher.group(1), scanner.nextLine());
+        }
+
+        StringSubstitutor sub = new StringSubstitutor(inputMap, "#{", "}");
+        return sub.replace(inputTemplate);
     }
 }
