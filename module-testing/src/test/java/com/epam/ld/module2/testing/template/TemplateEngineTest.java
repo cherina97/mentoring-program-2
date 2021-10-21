@@ -30,7 +30,16 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void generateTemplateTest(){
+    public void generateTemplateTestInFileMode(){
+        client.setAddresses("src/main/resources/input.txt");
+        String actual = templateEngine.generateMessage(template, client);
+        String expected = "Dear anyName, this is massage about anyEvent notification";
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void generateTemplateTestInConsoleMode(){
         String actual = templateEngine.generateMessage(template, client);
         String expected = "Dear anyName, this is massage about anyEvent notification";
 

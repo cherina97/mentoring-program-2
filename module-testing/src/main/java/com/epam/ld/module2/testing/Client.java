@@ -9,6 +9,16 @@ public class Client {
     private String addresses;
     private Map<String, String> data;
 
+    public Client() {
+    }
+
+    //address - path to input file
+    public Client(String addresses) {
+        this.addresses = addresses;
+    }
+
+
+
     /**
      * Gets addresses.
      *
