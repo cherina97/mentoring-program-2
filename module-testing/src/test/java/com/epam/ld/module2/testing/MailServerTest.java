@@ -69,7 +69,7 @@ public class MailServerTest {
     }
 
     @Test
-    public void mailServerShouldSendMessageToConsole() {
+    public void mockReadingFromConsole() {
         final String testString = "test string";
         provideInput();
 
