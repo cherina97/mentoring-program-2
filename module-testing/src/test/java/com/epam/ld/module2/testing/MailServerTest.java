@@ -6,11 +6,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +34,22 @@ public class MailServerTest {
         template.setTemplate("Dear #{NAME}, this is massage about #{EVENT} notification");
         Map<String, String> map = new HashMap<>();
         client.setData(map);
+    }
+
+    @TempDir
+    File file = new File("src/main/resources/");
+
+    @Test
+    @FileMode
+    public void testTemporaryFolderSentInFileMode(){
+        client.setAddresses("src/main/resources/input.txt");
+        String generateMessage = templateEngine.generateMessage(template, client);
+
+        mailServer.send(file.toString(), generateMessage);
+
+        String expected = "Dear anyName, this is massage about anyEvent notification";
+
+        Assertions.assertEquals(expected, generateMessage);
     }
 
     @ParameterizedTest
