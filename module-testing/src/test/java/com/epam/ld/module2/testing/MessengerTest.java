@@ -2,7 +2,6 @@ package com.epam.ld.module2.testing;
 
 import com.epam.ld.module2.testing.template.Template;
 import com.epam.ld.module2.testing.template.TemplateEngine;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,7 @@ public class MessengerTest {
     private Client client;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         mailServer = new MailServer();
         templateEngine = new TemplateEngine();
         messenger = new Messenger(mailServer, templateEngine);
@@ -26,7 +25,7 @@ public class MessengerTest {
     }
 
     @Test
-    public void sendMessageTest(){
+    public void sendMessageTest() {
         client.setAddresses("address1");
 
         Map<String, String> map = new HashMap<>();

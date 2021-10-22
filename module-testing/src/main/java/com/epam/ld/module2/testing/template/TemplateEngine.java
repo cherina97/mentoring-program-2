@@ -3,9 +3,6 @@ package com.epam.ld.module2.testing.template;
 import com.epam.ld.module2.testing.Client;
 import org.apache.commons.text.StringSubstitutor;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

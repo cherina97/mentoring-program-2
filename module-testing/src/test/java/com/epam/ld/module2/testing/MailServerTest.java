@@ -27,10 +27,10 @@ public class MailServerTest {
     private ByteArrayInputStream byteArrayInputStream;
     private ByteArrayOutputStream byteArrayOutputStream;
 
-    private MailServer mailServer = new MailServer();
-    private TemplateEngine templateEngine = new TemplateEngine();
-    private Client client = new Client();
-    private Template template = new Template();
+    private final MailServer mailServer = new MailServer();
+    private final TemplateEngine templateEngine = new TemplateEngine();
+    private final Client client = new Client();
+    private final Template template = new Template();
 
     @BeforeEach
     public void setUp() {
@@ -44,7 +44,7 @@ public class MailServerTest {
 
     @Test
     @FileMode
-    public void testTemporaryFolderSentInFileMode(){
+    public void testTemporaryFolderSentInFileMode() {
         client.setAddresses("src/main/resources/input.txt");
         String generateMessage = templateEngine.generateMessage(template, client);
 
@@ -58,7 +58,7 @@ public class MailServerTest {
     @ParameterizedTest
     @ValueSource(strings = "src/main/resources/")
     @FileMode
-    public void parameterizedTestSentInFileMode(String address){
+    public void parameterizedTestSentInFileMode(String address) {
         client.setAddresses("src/main/resources/input.txt");
         String generateMessage = templateEngine.generateMessage(template, client);
 
@@ -71,7 +71,7 @@ public class MailServerTest {
 
     @Test
     @FileMode
-    public void testSentInFileMode(){
+    public void testSentInFileMode() {
         client.setAddresses("src/main/resources/input.txt");
         String generateMessage = templateEngine.generateMessage(template, client);
 
@@ -84,7 +84,7 @@ public class MailServerTest {
 
     @Test
     @Tag("consoleMode")
-    public void testSentInConsoleMode(){
+    public void testSentInConsoleMode() {
         String generateMessage = templateEngine.generateMessage(template, client);
         mailServer.send(client.getAddresses(), generateMessage);
 
@@ -94,17 +94,17 @@ public class MailServerTest {
     }
 
     @BeforeEach
-    public void setUpOutput(){
+    public void setUpOutput() {
         byteArrayOutputStream = new ByteArrayOutputStream();
         System.setOut(new PrintStream(byteArrayOutputStream));
     }
 
-    private void provideInput(){
+    private void provideInput() {
         byteArrayInputStream = new ByteArrayInputStream("test string".getBytes());
         System.setIn(byteArrayInputStream);
     }
 
-    private String getOutput(){
+    private String getOutput() {
         return byteArrayOutputStream.toString();
     }
 
