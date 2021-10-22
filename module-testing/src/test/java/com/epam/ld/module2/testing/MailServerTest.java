@@ -24,13 +24,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DisabledOnJre(JRE.OTHER)
 public class MailServerTest {
 
-    private ByteArrayInputStream byteArrayInputStream;
-    private ByteArrayOutputStream byteArrayOutputStream;
-
     private final MailServer mailServer = new MailServer();
     private final TemplateEngine templateEngine = new TemplateEngine();
     private final Client client = new Client();
     private final Template template = new Template();
+
+    @TempDir
+    File file = new File("src/main/resources/");
 
     @BeforeEach
     public void setUp() {
@@ -38,9 +38,6 @@ public class MailServerTest {
         Map<String, String> map = new HashMap<>();
         client.setData(map);
     }
-
-    @TempDir
-    File file = new File("src/main/resources/");
 
     @Test
     @FileMode
@@ -85,37 +82,14 @@ public class MailServerTest {
     @Test
     @Tag("consoleMode")
     public void testSentInConsoleMode() {
+        ByteArrayInputStream in = new ByteArrayInputStream("anyName\nanyEvent\n".getBytes());
+        System.setIn(in);
+
         String generateMessage = templateEngine.generateMessage(template, client);
         mailServer.send(client.getAddresses(), generateMessage);
 
         String expected = "Dear anyName, this is massage about anyEvent notification";
 
         Assertions.assertEquals(expected, generateMessage);
-    }
-
-    @BeforeEach
-    public void setUpOutput() {
-        byteArrayOutputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(byteArrayOutputStream));
-    }
-
-    private void provideInput() {
-        byteArrayInputStream = new ByteArrayInputStream("test string".getBytes());
-        System.setIn(byteArrayInputStream);
-    }
-
-    private String getOutput() {
-        return byteArrayOutputStream.toString();
-    }
-
-    @Test
-    public void mockReadingFromConsole() {
-        final String testString = "test string";
-        provideInput();
-
-        MailServer mailServer = new MailServer();
-        mailServer.send("", testString);
-
-        assertEquals(testString, getOutput());
     }
 }

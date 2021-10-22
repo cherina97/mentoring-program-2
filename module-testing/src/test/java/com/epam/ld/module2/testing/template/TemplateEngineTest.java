@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,14 +41,19 @@ public class TemplateEngineTest {
 
     @Test
     public void generateTemplateTestInConsoleMode() {
-        String actual = templateEngine.generateMessage(template, client);
-        String expected = "Dear anyName, this is massage about anyEvent notification";
+        ByteArrayInputStream in = new ByteArrayInputStream("anyName\nanyEvent\n".getBytes());
+        System.setIn(in);
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(
+                "Dear anyName, this is massage about anyEvent notification",
+                templateEngine.generateMessage(template, client));
     }
 
     @Test
     public void messageCantBeNull() {
+        ByteArrayInputStream in = new ByteArrayInputStream("anyName\nanyEvent\n".getBytes());
+        System.setIn(in);
+
         String message = templateEngine.generateMessage(template, client);
 
         Assertions.assertNotNull(message);
@@ -62,6 +68,9 @@ public class TemplateEngineTest {
 
     @Test
     public void messageCantBeEmpty() {
+        ByteArrayInputStream in = new ByteArrayInputStream("anyName\nanyEvent\n".getBytes());
+        System.setIn(in);
+
         String message = templateEngine.generateMessage(template, client);
 
         MatcherAssert.assertThat(message, not(isEmptyString()));
