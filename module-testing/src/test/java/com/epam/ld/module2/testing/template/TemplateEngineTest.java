@@ -30,7 +30,7 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void generateTemplateTestInFileMode(){
+    public void generateTemplateTestInFileMode() {
         client.setAddresses("src/main/resources/input.txt");
         String actual = templateEngine.generateMessage(template, client);
         String expected = "Dear anyName, this is massage about anyEvent notification";
@@ -39,7 +39,7 @@ public class TemplateEngineTest {
     }
 
     @Test
-    public void generateTemplateTestInConsoleMode(){
+    public void generateTemplateTestInConsoleMode() {
         String actual = templateEngine.generateMessage(template, client);
         String expected = "Dear anyName, this is massage about anyEvent notification";
 
@@ -51,6 +51,13 @@ public class TemplateEngineTest {
         String message = templateEngine.generateMessage(template, client);
 
         Assertions.assertNotNull(message);
+    }
+
+    @Test
+    public void testExpectedException() {
+        Assertions.assertThrows(RuntimeException.class,
+                () -> templateEngine.generateMessage(new Template(), new Client()),
+                "Expected RuntimeException to throw, but it didn't");
     }
 
     @Test
