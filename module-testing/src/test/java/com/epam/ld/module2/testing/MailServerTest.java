@@ -4,6 +4,7 @@ import com.epam.ld.module2.testing.template.Template;
 import com.epam.ld.module2.testing.template.TemplateEngine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -35,6 +36,7 @@ public class MailServerTest {
 
     @ParameterizedTest
     @ValueSource(strings = "src/main/resources/")
+    @FileMode
     public void parameterizedTestSentInFileMode(String address){
         client.setAddresses("src/main/resources/input.txt");
         String generateMessage = templateEngine.generateMessage(template, client);
@@ -47,6 +49,7 @@ public class MailServerTest {
     }
 
     @Test
+    @FileMode
     public void testSentInFileMode(){
         client.setAddresses("src/main/resources/input.txt");
         String generateMessage = templateEngine.generateMessage(template, client);
@@ -59,6 +62,7 @@ public class MailServerTest {
     }
 
     @Test
+    @Tag("consoleMode")
     public void testSentInConsoleMode(){
         String generateMessage = templateEngine.generateMessage(template, client);
         mailServer.send(client.getAddresses(), generateMessage);
