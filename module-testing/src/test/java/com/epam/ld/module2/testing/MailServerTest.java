@@ -13,13 +13,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @DisabledOnJre(JRE.OTHER)
 public class MailServerTest {
@@ -37,6 +35,18 @@ public class MailServerTest {
         template.setTemplate("Dear #{NAME}, this is massage about #{EVENT} notification");
         Map<String, String> map = new HashMap<>();
         client.setData(map);
+    }
+
+    @Test
+    public void partialMockTest(){
+        MailServer mailServer = mock(MailServer.class);
+        when(mailServer.getMessageSent()).thenReturn(template.getTemplate());
+    }
+
+    @Test
+    public void spyTest(){
+        MailServer spy = spy(mailServer);
+        when(spy.getMessageSent()).thenReturn(template.getTemplate());
     }
 
     @Test
