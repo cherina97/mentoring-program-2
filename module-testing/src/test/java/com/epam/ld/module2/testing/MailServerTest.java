@@ -5,6 +5,8 @@ import com.epam.ld.module2.testing.template.TemplateEngine;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,6 +31,19 @@ public class MailServerTest {
         template.setTemplate("Dear #{NAME}, this is massage about #{EVENT} notification");
         Map<String, String> map = new HashMap<>();
         client.setData(map);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = "src/main/resources/")
+    public void parameterizedTestSentInFileMode(String address){
+        client.setAddresses("src/main/resources/input.txt");
+        String generateMessage = templateEngine.generateMessage(template, client);
+
+        mailServer.send(address, generateMessage);
+
+        String expected = "Dear anyName, this is massage about anyEvent notification";
+
+        Assertions.assertEquals(expected, generateMessage);
     }
 
     @Test
