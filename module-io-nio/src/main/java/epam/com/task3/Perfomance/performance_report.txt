@@ -1,0 +1,20 @@
+File Streams:
+1 kb -    5573617 nanoseconds
+100 kb -  440146843 nanoseconds
+
+File Streams with Buffer:
+1 kb -    941856 nanoseconds
+100 kb -  1090726 nanoseconds
+1024 kb - 1927186 nanoseconds
+
+File Streams with Channels:
+1 kb -    648243 nanoseconds
+100 kb -  607927 nanoseconds
+1024 kb - 756460 nanoseconds
+
+File Streams uses NIO 2 File API:
+1 kb -    1069982 nanoseconds
+100 kb -  1072263 nanoseconds
+1024 kb - 1095761 nanoseconds
+
+
