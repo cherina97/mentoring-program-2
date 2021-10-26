@@ -13,6 +13,7 @@
         <module>module-java8</module>
         <module>module-multithreading</module>
         <module>module-testing</module>
+        <module>module-io-nio</module>
     </modules>
 
     <properties>
