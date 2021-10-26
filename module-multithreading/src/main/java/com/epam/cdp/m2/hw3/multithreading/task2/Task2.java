@@ -2,6 +2,7 @@ package com.epam.cdp.m2.hw3.multithreading.task2;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -45,9 +46,12 @@ public class Task2 {
             int squareSum = 0;
 
             for (Integer integer : list) {
-                squareSum += Math.pow(integer, 2);
+                squareSum += integer * integer;
             }
-            System.out.println(squareSum);
+
+            double result = Math.sqrt(squareSum);
+
+            System.out.println(result);
             lock.unlock();
         });
 

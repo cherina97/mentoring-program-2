@@ -1,6 +1,7 @@
 package com.epam.cdp.m2.hw3.multithreading.task3;
 
-import java.util.*;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -14,55 +15,76 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Task3 {
 
-    private final Queue<Integer> massageBus = new PriorityQueue<>();
-    private final static Integer CAPACITY = 10;
-    private final static Integer COUNT_OF_MASSAGE = 10;
-    private final Object object = new Object();
+    private final static Integer COUNT_OF_MASSAGE = 5;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        final ProducerConsumer producerConsumer = new ProducerConsumer();
 
-        Runnable producer = () -> {
-            for (int i = 0; i < COUNT_OF_MASSAGE; i++) {
-//                System.out.println("Massage produce - " + new Task3().produce(random.nextInt(100)));
-                System.out.println("Massage produce - " + new Task3().produce(ThreadLocalRandom.current().nextInt(100)));
+        Thread producer = new Thread(() -> {
+            try {
+                for (int i = 0; i < COUNT_OF_MASSAGE; i++) {
+                    producerConsumer.produce();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        };
+        });
 
-        Runnable consumer = () -> {
-            System.out.println("Massage consume - " + new Task3().consume());
-        };
+        Thread consumer = new Thread(() -> {
+            try {
+                for (int i = 0; i < COUNT_OF_MASSAGE; i++) {
+                    producerConsumer.consume();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
 
-        Arrays.asList(new Thread(producer), new Thread(consumer))
-                .forEach(Thread::start);
+        producer.start();
+        consumer.start();
+
+        consumer.join();
+        producer.join();
     }
 
-    private Integer produce(Integer putValue) {
-        synchronized (this) {
-            while (massageBus.size() == CAPACITY) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+    public static class ProducerConsumer {
+        private final Queue<Integer> massageBus = new PriorityQueue<>();
+        private final static Integer CAPACITY = 10;
+
+        public void produce() throws InterruptedException {
+
+            synchronized (this) {
+                while (massageBus.size() == CAPACITY) {
+                    try {
+                        wait();
+                    } catch (InterruptedException exception) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
+
+                Integer value = ThreadLocalRandom.current().nextInt(10);
+                System.out.println("produce + " + value);
+                massageBus.offer(value);
+
+                System.out.println("after produce " + massageBus);
+                notifyAll();
+
+                Thread.sleep(100);
             }
-            massageBus.add(putValue);
-            notifyAll();
-            return putValue;
         }
-    }
 
-    private Integer consume() {
-        synchronized (this) {
-            while (massageBus.isEmpty()) {
-                try {
+        public void consume() throws InterruptedException {
+            synchronized (this) {
+                while (massageBus.isEmpty()) {
                     wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
                 }
+
+                System.out.println("consume - " + massageBus.poll());
+                System.out.println("after consume " + massageBus);
+                notifyAll();
+
+                Thread.sleep(100);
             }
-            Integer removeValue = massageBus.poll();
-            notifyAll();
-            return removeValue;
         }
     }
 }
