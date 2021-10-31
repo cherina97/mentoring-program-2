@@ -12,7 +12,7 @@
 		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>module-java8</artifactId>
+	<artifactId>module-io-nio</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
 </project>
