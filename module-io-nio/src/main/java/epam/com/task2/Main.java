@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter a disc (D:) or (C:)");
+        System.out.println("Please enter a disc (D:/) or (C:/)");
         String path = scanner.nextLine();
 
         DiskAnalyzer diskAnalyzer = new DiskAnalyzer(path);

@@ -1,6 +1,11 @@
 package epam.com.task2;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileStore;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class DiskAnalyzer {
@@ -74,15 +79,9 @@ public class DiskAnalyzer {
     }
 
     private void retrieveFiles(File dir) {
-        if (dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    retrieveFiles(file);
-                }
-            }
-        } else {
-            filesList.add(dir);
-        }
+        File[] pathname;
+        pathname = dir.listFiles();
+
+        Collections.addAll(filesList, Objects.requireNonNull(pathname));
     }
 }
