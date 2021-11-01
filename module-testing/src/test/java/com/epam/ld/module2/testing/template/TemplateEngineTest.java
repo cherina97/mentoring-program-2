@@ -15,6 +15,8 @@ import static org.hamcrest.Matchers.not;
 
 public class TemplateEngineTest {
 
+    private static final String EXPECTED = "Dear anyName, this is massage about anyEvent notification";
+
     private TemplateEngine templateEngine;
     private Client client;
     private Template template;
@@ -34,9 +36,8 @@ public class TemplateEngineTest {
     public void generateTemplateTestInFileMode() {
         client.setAddresses("src/main/resources/input.txt");
         String actual = templateEngine.generateMessage(template, client);
-        String expected = "Dear anyName, this is massage about anyEvent notification";
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(EXPECTED, actual);
     }
 
     @Test
@@ -45,7 +46,7 @@ public class TemplateEngineTest {
         System.setIn(in);
 
         Assertions.assertEquals(
-                "Dear anyName, this is massage about anyEvent notification",
+                EXPECTED,
                 templateEngine.generateMessage(template, client));
     }
 

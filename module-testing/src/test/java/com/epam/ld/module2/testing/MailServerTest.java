@@ -22,6 +22,9 @@ import static org.mockito.Mockito.*;
 @DisabledOnJre(JRE.OTHER)
 public class MailServerTest {
 
+    private static final String EXPECTED = "Dear anyName, this is massage about anyEvent notification";
+    private static final String INPUT_RESOURCE = "src/main/resources/input.txt";
+
     private final MailServer mailServer = new MailServer();
     private final TemplateEngine templateEngine = new TemplateEngine();
     private final Client client = new Client();
@@ -52,41 +55,35 @@ public class MailServerTest {
     @Test
     @FileMode
     public void testTemporaryFolderSentInFileMode() {
-        client.setAddresses("src/main/resources/input.txt");
+        client.setAddresses(INPUT_RESOURCE);
         String generateMessage = templateEngine.generateMessage(template, client);
 
         mailServer.send(file.toString(), generateMessage);
 
-        String expected = "Dear anyName, this is massage about anyEvent notification";
-
-        Assertions.assertEquals(expected, generateMessage);
+        Assertions.assertEquals(EXPECTED, generateMessage);
     }
 
     @ParameterizedTest
     @ValueSource(strings = "src/main/resources/")
     @FileMode
     public void parameterizedTestSentInFileMode(String address) {
-        client.setAddresses("src/main/resources/input.txt");
+        client.setAddresses(INPUT_RESOURCE);
         String generateMessage = templateEngine.generateMessage(template, client);
 
         mailServer.send(address, generateMessage);
 
-        String expected = "Dear anyName, this is massage about anyEvent notification";
-
-        Assertions.assertEquals(expected, generateMessage);
+        Assertions.assertEquals(EXPECTED, generateMessage);
     }
 
     @Test
     @FileMode
     public void testSentInFileMode() {
-        client.setAddresses("src/main/resources/input.txt");
+        client.setAddresses(INPUT_RESOURCE);
         String generateMessage = templateEngine.generateMessage(template, client);
 
         mailServer.send("src/main/resources/", generateMessage);
 
-        String expected = "Dear anyName, this is massage about anyEvent notification";
-
-        Assertions.assertEquals(expected, generateMessage);
+        Assertions.assertEquals(EXPECTED, generateMessage);
     }
 
     @Test
@@ -98,8 +95,6 @@ public class MailServerTest {
         String generateMessage = templateEngine.generateMessage(template, client);
         mailServer.send(client.getAddresses(), generateMessage);
 
-        String expected = "Dear anyName, this is massage about anyEvent notification";
-
-        Assertions.assertEquals(expected, generateMessage);
+        Assertions.assertEquals(EXPECTED, generateMessage);
     }
 }
