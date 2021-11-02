@@ -14,6 +14,7 @@
         <module>module-multithreading</module>
         <module>module-testing</module>
         <module>module-io-nio</module>
+        <module>module-database</module>
     </modules>
 
     <properties>
