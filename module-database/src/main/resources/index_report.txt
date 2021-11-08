@@ -1,0 +1,250 @@
+\\\\\ no index \\\\\
+
+*** a) explain analyze select * from students where name = ''
+
+"Seq Scan on students  (cost=0.00..249.00 rows=1 width=69) (actual time=0.048..0.796 rows=2 loops=1)"
+"  Filter: ((name)::text = 'a49e9411d6'::text)"
+"  Rows Removed by Filter: 9998"
+"Planning Time: 0.553 ms"
+"Execution Time: 0.806 ms"
+
+*** b) explain analyze select * from students where surname like ''
+
+"Seq Scan on students  (cost=0.00..249.00 rows=1 width=69) (actual time=0.051..1.082 rows=19 loops=1)"
+"  Filter: ((surname)::text ~~ '%165%'::text)"
+"  Rows Removed by Filter: 9981"
+"Planning Time: 0.068 ms"
+"Execution Time: 1.093 ms"
+
+*** c) explain analyze select * from students where phone_number like ''
+
+"Seq Scan on students  (cost=0.00..249.00 rows=1 width=69) (actual time=0.051..1.098 rows=3 loops=1)"
+"  Filter: ((phone_number)::text ~~ '%720%'::text)"
+"  Rows Removed by Filter: 9997"
+"Planning Time: 0.075 ms"
+"Execution Time: 1.109 ms"
+
+*** d) inner join
+
+"Nested Loop  (cost=0.00..252.25 rows=1 width=85) (actual time=1.342..1.343 rows=0 loops=1)"
+"  Join Filter: (s.id = er.student_id)"
+"  Rows Removed by Join Filter: 1900"
+"  ->  Seq Scan on students s  (cost=0.00..249.00 rows=1 width=69) (actual time=0.036..1.059 rows=19 loops=1)"
+"        Filter: ((surname)::text ~~ '%165%'::text)"
+"        Rows Removed by Filter: 9981"
+"  ->  Seq Scan on exam_result er  (cost=0.00..2.00 rows=100 width=16) (actual time=0.002..0.006 rows=100 loops=19)"
+"Planning Time: 0.655 ms"
+"Execution Time: 1.364 ms"
+
+insert 10 000 students, 1000 subjects, 100 exam_result
+
+\\\\\ index B-tree \\\\\\
+create index students_name_index on students using btree (name)
+create index students_surname_index on students using btree (surname)
+create index students_phone_index on students using btree (phone_number)
+
+
+before inserting data : "Seq Scan on students  (cost=0.00..10.50 rows=50 width=1604) (actual time=0.006..0.007 rows=0 loops=1)"
+                                    "Planning Time: 0.055 ms"
+                                    "Execution Time: 0.016 ms"
+
+*** a) explain analyze select * from students where name = 'a49e9411d6'
+
+"Index Scan using students_name_index on students  (cost=0.29..8.30 rows=1 width=69) (actual time=0.060..0.064 rows=2 loops=1)"
+"  Index Cond: ((name)::text = 'a49e9411d6'::text)"
+"Planning Time: 1.322 ms"
+"Execution Time: 0.077 ms"
+
+*** b) explain analyze select * from students where surname like '%165%'
+
+"Seq Scan on students  (cost=0.00..249.00 rows=1 width=69) (actual time=0.039..1.097 rows=19 loops=1)"
+"  Filter: ((surname)::text ~~ '%165%'::text)"
+"  Rows Removed by Filter: 9981"
+"Planning Time: 1.404 ms"
+"Execution Time: 1.108 ms"
+
+*** c) explain analyze select * from students where phone_number like '%720%'
+
+"Seq Scan on students  (cost=0.00..249.00 rows=1 width=69) (actual time=0.050..1.148 rows=3 loops=1)"
+"  Filter: ((phone_number)::text ~~ '%720%'::text)"
+"  Rows Removed by Filter: 9997"
+"Planning Time: 0.083 ms"
+"Execution Time: 1.159 ms"
+
+*** d) explain analyze select * from students s
+       inner join exam_result er
+       on s.id = er.student_id
+       where surname like '%165%'
+
+"Nested Loop  (cost=0.00..252.25 rows=1 width=85) (actual time=2.860..2.861 rows=0 loops=1)"
+"  Join Filter: (s.id = er.student_id)"
+"  Rows Removed by Join Filter: 1900"
+"  ->  Seq Scan on students s  (cost=0.00..249.00 rows=1 width=69) (actual time=0.045..2.298 rows=19 loops=1)"
+"        Filter: ((surname)::text ~~ '%165%'::text)"
+"        Rows Removed by Filter: 9981"
+"  ->  Seq Scan on exam_result er  (cost=0.00..2.00 rows=100 width=16) (actual time=0.005..0.010 rows=100 loops=19)"
+"Planning Time: 1.752 ms"
+"Execution Time: 2.904 ms"
+
+
+\\\\\ index Hash \\\\\
+create index students_name_index on students using hash (name);
+
+explain analyze select * from students
+
+
+before inserting data : "Seq Scan on students  (cost=0.00..0.00 rows=1 width=69) (actual time=0.006..0.006 rows=0 loops=1)"
+                                  "Planning Time: 1.267 ms"
+                                  "Execution Time: 0.017 ms"
+
+*** a) explain analyze select * from students where name = ''
+
+"Index Scan using students_name_index on students  (cost=0.00..8.02 rows=1 width=69) (actual time=0.026..0.028 rows=2 loops=1)"
+"  Index Cond: ((name)::text = 'a49e9411d6'::text)"
+"Planning Time: 1.665 ms"
+"Execution Time: 0.041 ms"
+
+
+*** b) explain analyze select * from students where surname like ''
+
+"Seq Scan on students  (cost=0.00..249.00 rows=1 width=69) (actual time=0.037..1.064 rows=19 loops=1)"
+"  Filter: ((surname)::text ~~ '%165%'::text)"
+"  Rows Removed by Filter: 9981"
+"Planning Time: 0.117 ms"
+"Execution Time: 1.073 ms"
+
+
+*** c) explain analyze select * from students where phone_number like ''
+
+"Seq Scan on students  (cost=0.00..249.00 rows=1 width=69) (actual time=0.061..1.094 rows=3 loops=1)"
+"  Filter: ((phone_number)::text ~~ '%720%'::text)"
+"  Rows Removed by Filter: 9997"
+"Planning Time: 0.106 ms"
+"Execution Time: 1.108 ms"
+
+
+*** d) inner join
+
+"Nested Loop  (cost=0.00..252.25 rows=1 width=85) (actual time=1.416..1.417 rows=0 loops=1)"
+"  Join Filter: (s.id = er.student_id)"
+"  Rows Removed by Join Filter: 1900"
+"  ->  Seq Scan on students s  (cost=0.00..249.00 rows=1 width=69) (actual time=0.039..1.139 rows=19 loops=1)"
+"        Filter: ((surname)::text ~~ '%165%'::text)"
+"        Rows Removed by Filter: 9981"
+"  ->  Seq Scan on exam_result er  (cost=0.00..2.00 rows=100 width=16) (actual time=0.002..0.006 rows=100 loops=19)"
+"Planning Time: 0.635 ms"
+"Execution Time: 1.434 ms"
+
+
+\\\\\ index GIN \\\\\
+create extension pg_trgm;
+create index students_name_index on students using gin (name gin_trgm_ops);
+create index students_surname_index on students using gin (surname gin_trgm_ops);
+create index students_phone_index on students using gin (phone_number gin_trgm_ops)
+
+explain analyze select * from students
+
+
+before inserting data : "Seq Scan on students  (cost=0.00..0.00 rows=1 width=69) (actual time=0.006..0.006 rows=0 loops=1)"
+                                 "Planning Time: 1.057 ms"
+                                 "Execution Time: 0.014 ms"
+
+*** a) explain analyze select * from students where name = ''
+
+"Bitmap Heap Scan on students  (cost=92.01..96.02 rows=1 width=69) (actual time=0.055..0.057 rows=2 loops=1)"
+"  Recheck Cond: ((name)::text = 'a49e9411d6'::text)"
+"  Heap Blocks: exact=2"
+"  ->  Bitmap Index Scan on students_name_index  (cost=0.00..92.01 rows=1 width=0) (actual time=0.048..0.048 rows=2 loops=1)"
+"        Index Cond: ((name)::text = 'a49e9411d6'::text)"
+"Planning Time: 0.127 ms"
+"Execution Time: 0.083 ms"
+
+
+*** b) explain analyze select * from students where surname like ''
+
+"Bitmap Heap Scan on students  (cost=12.01..16.02 rows=1 width=69) (actual time=0.015..0.029 rows=19 loops=1)"
+"  Recheck Cond: ((surname)::text ~~ '%165%'::text)"
+"  Heap Blocks: exact=19"
+"  ->  Bitmap Index Scan on students_surname_index  (cost=0.00..12.01 rows=1 width=0) (actual time=0.009..0.010 rows=19 loops=1)"
+"        Index Cond: ((surname)::text ~~ '%165%'::text)"
+"Planning Time: 0.089 ms"
+"Execution Time: 0.049 ms"
+
+*** c) explain analyze select * from students where phone_number like ''
+
+"Bitmap Heap Scan on students  (cost=12.01..16.02 rows=1 width=69) (actual time=0.014..0.016 rows=3 loops=1)"
+"  Recheck Cond: ((phone_number)::text ~~ '%720%'::text)"
+"  Heap Blocks: exact=2"
+"  ->  Bitmap Index Scan on students_phone_index  (cost=0.00..12.01 rows=1 width=0) (actual time=0.009..0.009 rows=3 loops=1)"
+"        Index Cond: ((phone_number)::text ~~ '%720%'::text)"
+"Planning Time: 0.115 ms"
+"Execution Time: 0.052 ms"
+
+*** d) inner join
+
+"Hash Join  (cost=16.03..18.30 rows=1 width=85) (actual time=0.060..0.061 rows=0 loops=1)"
+"  Hash Cond: (er.student_id = s.id)"
+"  ->  Seq Scan on exam_result er  (cost=0.00..2.00 rows=100 width=16) (actual time=0.006..0.011 rows=100 loops=1)"
+"  ->  Hash  (cost=16.02..16.02 rows=1 width=69) (actual time=0.041..0.041 rows=19 loops=1)"
+"        Buckets: 1024  Batches: 1  Memory Usage: 10kB"
+"        ->  Bitmap Heap Scan on students s  (cost=12.01..16.02 rows=1 width=69) (actual time=0.023..0.038 rows=19 loops=1)"
+"              Recheck Cond: ((surname)::text ~~ '%165%'::text)"
+"              Heap Blocks: exact=19"
+"              ->  Bitmap Index Scan on students_surname_index  (cost=0.00..12.01 rows=1 width=0) (actual time=0.018..0.018 rows=19 loops=1)"
+"                    Index Cond: ((surname)::text ~~ '%165%'::text)"
+"Planning Time: 0.191 ms"
+"Execution Time: 0.087 ms"
+
+\\\\\ index GIST \\\\\
+create extension pg_trgm;
+create index students_name_index on students using gist (name gist_trgm_ops);
+create index students_surname_index on students using gist (surname gist_trgm_ops);
+create index students_phone_index on students using gist (phone_number gist_trgm_ops)
+
+explain analyze select * from students
+
+
+before inserting data : "Seq Scan on students  (cost=0.00..0.00 rows=1 width=69) (actual time=0.008..0.008 rows=0 loops=1)"
+                                  "Planning Time: 1.791 ms"
+                                  "Execution Time: 0.019 ms"
+
+*** a) explain analyze select * from students where name = ''
+
+"Index Scan using students_name_index on students  (cost=0.28..8.29 rows=1 width=69) (actual time=0.067..0.316 rows=2 loops=1)"
+"  Index Cond: ((name)::text = 'a49e9411d6'::text)"
+"Planning Time: 0.079 ms"
+"Execution Time: 0.329 ms"
+
+*** b) explain analyze select * from students where surname like ''
+
+"Index Scan using students_surname_index on students  (cost=0.15..8.17 rows=1 width=69) (actual time=0.038..0.686 rows=19 loops=1)"
+"  Index Cond: ((surname)::text ~~ '%165%'::text)"
+"Planning Time: 0.086 ms"
+"Execution Time: 0.700 ms"
+
+
+*** c) explain analyze select * from students where phone_number like ''
+
+"Index Scan using students_phone_index on students  (cost=0.15..8.17 rows=1 width=69) (actual time=0.271..0.510 rows=3 loops=1)"
+"  Index Cond: ((phone_number)::text ~~ '%720%'::text)"
+"Planning Time: 0.082 ms"
+"Execution Time: 0.523 ms"
+
+*** d) inner join
+
+"Hash Join  (cost=8.18..10.44 rows=1 width=85) (actual time=0.764..0.765 rows=0 loops=1)"
+"  Hash Cond: (er.student_id = s.id)"
+"  ->  Seq Scan on exam_result er  (cost=0.00..2.00 rows=100 width=16) (actual time=0.009..0.014 rows=100 loops=1)"
+"  ->  Hash  (cost=8.17..8.17 rows=1 width=69) (actual time=0.735..0.735 rows=19 loops=1)"
+"        Buckets: 1024  Batches: 1  Memory Usage: 10kB"
+"        ->  Index Scan using students_surname_index on students s  (cost=0.15..8.17 rows=1 width=69) (actual time=0.041..0.730 rows=19 loops=1)"
+"              Index Cond: ((surname)::text ~~ '%165%'::text)"
+"Planning Time: 0.175 ms"
+"Execution Time: 0.786 ms"
+
+
+
+
+drop index students_name_index;
+drop index students_surname_index;
+drop index students_phone_index;
