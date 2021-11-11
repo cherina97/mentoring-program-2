@@ -15,6 +15,7 @@
         <module>module-testing</module>
         <module>module-io-nio</module>
         <module>module-database</module>
+        <module>spring-core</module>
     </modules>
 
     <properties>
