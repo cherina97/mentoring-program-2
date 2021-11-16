@@ -1,5 +1,6 @@
 package facade;
 
+import exception.UserNotFoundException;
 import model.Event;
 import model.Ticket;
 import model.User;
@@ -78,7 +79,7 @@ public interface BookingFacade {
      *
      * @return User.
      */
-    User getUserByEmail(String email);
+    User getUserByEmail(String email) throws UserNotFoundException;
 
     /**
      * Get list of users by matching name. Name is matched using 'contains' approach.

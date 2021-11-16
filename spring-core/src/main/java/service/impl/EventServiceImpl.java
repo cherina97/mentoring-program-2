@@ -2,7 +2,6 @@ package service.impl;
 
 import dao.EventDao;
 import model.Event;
-import model.User;
 import service.EventService;
 
 import java.util.Calendar;
@@ -15,6 +14,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventDao eventDao;
 
+    //constructor injection
     public EventServiceImpl(EventDao eventDao) {
         this.eventDao = eventDao;
     }

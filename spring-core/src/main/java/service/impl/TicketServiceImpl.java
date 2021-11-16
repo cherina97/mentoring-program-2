@@ -15,6 +15,7 @@ public class TicketServiceImpl implements TicketService {
 
     private final TicketDao ticketDao;
 
+    //constructor injection
     public TicketServiceImpl(TicketDao ticketDao) {
         this.ticketDao = ticketDao;
     }
