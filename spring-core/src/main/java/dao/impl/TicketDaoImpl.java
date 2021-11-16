@@ -4,6 +4,8 @@ import dao.TicketDao;
 import model.Ticket;
 import storage.Storage;
 
+import java.util.List;
+
 public class TicketDaoImpl implements TicketDao {
 
     private Storage storage;
@@ -26,6 +28,11 @@ public class TicketDaoImpl implements TicketDao {
     @Override
     public Ticket deleteTicket(long id) {
         return storage.getTickets().remove(id);
+    }
+
+    @Override
+    public List<Ticket> getAllTickets() {
+        return (List<Ticket>) storage.getTickets().values();
     }
 
     //setter injection in xml

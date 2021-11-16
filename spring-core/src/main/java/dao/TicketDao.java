@@ -1,7 +1,8 @@
 package dao;
 
-import model.Event;
 import model.Ticket;
+
+import java.util.List;
 
 public interface TicketDao {
 
@@ -12,4 +13,6 @@ public interface TicketDao {
     Ticket updateTicket(Ticket ticket);
 
     Ticket deleteTicket(long id);
+
+    List<Ticket> getAllTickets();
 }
