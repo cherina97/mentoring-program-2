@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   		http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+    <bean class="storage.Storage" id="storage"
+          init-method="fillMapsWithDataFromFile"
+          p:pathToData="${storage.location}"/>
+
+    <bean class="dao.impl.UserDaoImpl" id="userDao"
+          p:storage-ref="storage"/>
+
+    <bean class="dao.impl.EventDaoImpl" id="eventDao"
+          p:storage-ref="storage"/>
+
+    <bean class="dao.impl.TicketDaoImpl" id="ticketDao"
+          p:storage-ref="storage"/>
+
+</beans>
