@@ -36,9 +36,7 @@ public class Storage {
             while ((line = bufferedReader.readLine()) != null) {
                 String[] split = line.split(", ");
 
-                String key = split[0];
-
-                switch (key) {
+                switch (split[0]) {
                     case "User":
                         User user = new UserImpl(split[2], split[3]);
                         user.setId(Long.parseLong(split[1]));

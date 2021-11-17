@@ -10,11 +10,6 @@ public class UserDaoImpl implements UserDao {
 
     private Storage storage;
 
-    //setter injection in xml
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
-
     @Override
     public User createUser(User user) {
         return storage.getUsers().put(user.getId(), user);
@@ -38,5 +33,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         return (List<User>) storage.getUsers().values();
+    }
+
+    //setter injection in xml
+    public void setStorage(Storage storage) {
+        this.storage = storage;
     }
 }
