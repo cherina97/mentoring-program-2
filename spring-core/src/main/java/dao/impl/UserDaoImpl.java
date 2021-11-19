@@ -6,7 +6,6 @@ import storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class UserDaoImpl implements UserDao {
 
@@ -23,8 +22,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User updateUser(User user) {
-        return storage.getUsers().replace(user.getId(), user);
+    public User updateUser(long id, User user) {
+        return storage.getUsers().replace(id, user);
     }
 
     @Override

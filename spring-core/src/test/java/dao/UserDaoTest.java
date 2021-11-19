@@ -37,7 +37,7 @@ public class UserDaoTest {
     @Test
     public void updateUserTest() {
         Assert.assertNull(userDao.createUser(user));
-        Assert.assertEquals(user, userDao.updateUser(user));
+        Assert.assertEquals(user, userDao.updateUser(user.getId(), user));
     }
 
     @Test

@@ -3,12 +3,14 @@ package service.impl;
 import dao.UserDao;
 import exception.UserNotFoundException;
 import model.User;
+import org.springframework.stereotype.Service;
 import service.UserService;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
@@ -45,12 +47,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        return userDao.createUser(user);
+        //todo fix to find max free id
+        user.setId(4);
+        userDao.createUser(user);
+
+        return userDao.readUser(4);
     }
 
     @Override
-    public User updateUser(User user) {
-        return userDao.updateUser(user);
+    public User updateUser(long id, User user) {
+        userDao.updateUser(id, user);
+
+        return userDao.readUser(user.getId());
     }
 
     @Override

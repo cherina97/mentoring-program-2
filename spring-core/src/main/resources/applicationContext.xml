@@ -22,4 +22,8 @@
     <bean class="dao.impl.TicketDaoImpl" id="ticketDao"
           p:storage-ref="storage"/>
 
+    <bean id="userService" class="service.impl.UserServiceImpl">
+        <constructor-arg name="userDao" ref="userDao"/>
+    </bean>
+
 </beans>

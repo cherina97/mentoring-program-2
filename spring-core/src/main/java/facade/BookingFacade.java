@@ -106,7 +106,7 @@ public interface BookingFacade {
      * @param user User data for update. Should have id set.
      * @return Updated User object.
      */
-    User updateUser(User user);
+    User updateUser(long id, User user);
 
     /**
      * Deletes user by its id.

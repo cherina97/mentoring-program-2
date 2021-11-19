@@ -10,7 +10,7 @@ public interface UserDao {
 
     User readUser(long id);
 
-    User updateUser(User user);
+    User updateUser(long id, User user);
 
     User deleteUser(long id);
 

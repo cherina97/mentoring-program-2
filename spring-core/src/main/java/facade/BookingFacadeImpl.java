@@ -75,8 +75,8 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public User updateUser(User user) {
-        return userService.updateUser(user);
+    public User updateUser(long id, User user) {
+        return userService.updateUser(id, user);
     }
 
     @Override
