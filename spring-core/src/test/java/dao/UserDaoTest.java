@@ -15,7 +15,7 @@ public class UserDaoTest {
     User user;
 
     @Before
-    public void setup(){
+    public void setup() {
         applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
         userDao = applicationContext.getBean("userDao", UserDao.class);
 
@@ -23,7 +23,32 @@ public class UserDaoTest {
     }
 
     @Test
-    public void createUserTest(){
+    public void createUserTest() {
         Assert.assertNull(userDao.createUser(user));
+        Assert.assertEquals(user, userDao.readUser(user.getId()));
+    }
+
+    @Test
+    public void readUserTest() {
+        Assert.assertNull(userDao.createUser(user));
+        Assert.assertEquals(user, userDao.readUser(user.getId()));
+    }
+
+    @Test
+    public void updateUserTest() {
+        Assert.assertNull(userDao.createUser(user));
+        Assert.assertEquals(user, userDao.updateUser(user));
+    }
+
+    @Test
+    public void deleteUserTest() {
+        Assert.assertNull(userDao.createUser(user));
+        Assert.assertEquals(user, userDao.deleteUser(user.getId()));
+    }
+
+    @Test
+    public void getAllUsersTest() {
+        Assert.assertNull(userDao.createUser(user));
+        Assert.assertNotNull(userDao.getAllUsers());
     }
 }

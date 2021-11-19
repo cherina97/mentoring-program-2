@@ -4,6 +4,7 @@ import dao.TicketDao;
 import model.Ticket;
 import storage.Storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TicketDaoImpl implements TicketDao {
@@ -32,7 +33,7 @@ public class TicketDaoImpl implements TicketDao {
 
     @Override
     public List<Ticket> getAllTickets() {
-        return (List<Ticket>) storage.getTickets().values();
+        return new ArrayList<>(storage.getTickets().values());
     }
 
     //setter injection in xml

@@ -4,7 +4,9 @@ import dao.UserDao;
 import model.User;
 import storage.Storage;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserDaoImpl implements UserDao {
 
@@ -32,7 +34,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAllUsers() {
-        return (List<User>) storage.getUsers().values();
+        return new ArrayList<>(storage.getUsers().values());
     }
 
     //setter injection in xml

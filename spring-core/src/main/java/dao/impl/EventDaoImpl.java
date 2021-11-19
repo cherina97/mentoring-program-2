@@ -4,6 +4,7 @@ import dao.EventDao;
 import model.Event;
 import storage.Storage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventDaoImpl implements EventDao {
@@ -37,6 +38,6 @@ public class EventDaoImpl implements EventDao {
 
     @Override
     public List<Event> getAllEvents() {
-        return (List<Event>) storage.getEvents().values();
+        return new ArrayList<>(storage.getEvents().values());
     }
 }
