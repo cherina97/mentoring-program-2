@@ -1,12 +1,13 @@
 package service.impl;
 
 import dao.TicketDao;
-import exception.EventNotFoundException;
 import exception.TicketNotFoundException;
 import model.Event;
 import model.Ticket;
 import model.User;
 import model.impl.TicketImpl;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import service.TicketService;
 
 import java.util.Comparator;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class TicketServiceImpl implements TicketService {
 
+    private static final Log LOGGER = LogFactory.getLog(TicketServiceImpl.class);
     private final TicketDao ticketDao;
 
     //constructor injection
@@ -30,6 +32,7 @@ public class TicketServiceImpl implements TicketService {
                 .orElseThrow(() -> new TicketNotFoundException("There are no tickets in storage"));
 
         Ticket ticket = new TicketImpl(eventId, userId, category, place);
+        LOGGER.info("bookTicket" + ticket);
         ticket.setId(maxId + 1);
         ticketDao.createTicket(ticket);
 
@@ -38,6 +41,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getBookedTickets(User user, int pageSize, int pageNum) {
+        LOGGER.info("getBookedTickets by user " + user);
         return ticketDao.getAllTickets()
                 .stream()
                 .filter(ticket -> ticket.getUserId() == user.getId())
@@ -49,6 +53,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getBookedTickets(Event event, int pageSize, int pageNum) {
+        LOGGER.info("getBookedTickets by event " + event);
         return ticketDao.getAllTickets()
                 .stream()
                 .filter(ticket -> ticket.getEventId() == event.getId())
@@ -60,6 +65,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public boolean cancelTicket(long ticketId) {
+        LOGGER.info("cancelTicket " + ticketId);
         Ticket ticket = ticketDao.deleteTicket(ticketId);
         return ticket != null;
     }

@@ -2,9 +2,9 @@ package service.impl;
 
 import dao.EventDao;
 import exception.EventNotFoundException;
-import exception.UserNotFoundException;
 import model.Event;
-import model.User;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import service.EventService;
 
 import java.util.Calendar;
@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 public class EventServiceImpl implements EventService {
 
+    private static final Log LOGGER = LogFactory.getLog(EventServiceImpl.class);
     private final EventDao eventDao;
 
     //constructor injection
@@ -24,11 +25,13 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getById(long id) {
+        LOGGER.info("getById event " + id);
         return eventDao.readEvent(id);
     }
 
     @Override
     public List<Event> getEventsByTitle(String title, int pageSize, int pageNum) {
+        LOGGER.info("getEventsByTitle " + title);
         return eventDao.getAllEvents()
                 .stream()
                 .filter(event -> event.getTitle().equals(title))
@@ -40,6 +43,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getEventsForDay(Date day, int pageSize, int pageNum) {
+        LOGGER.info("getEventsForDay " + day);
         int dayOfWeekFromDate = getDayOfWeekFromDate(day);
 
         return eventDao.getAllEvents()
@@ -62,6 +66,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event createEvent(Event event) throws EventNotFoundException {
+        LOGGER.info("createEvent " + event);
         Long maxId = eventDao.getAllEvents().stream()
                 .max(Comparator.comparing(Event::getId))
                 .map(Event::getId)
@@ -75,6 +80,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event updateEvent(long id, Event event) {
+        LOGGER.info("updateEvent " + event);
         eventDao.updateEvent(id, event);
 
         return eventDao.readEvent(id);
@@ -82,6 +88,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public boolean deleteEvent(long eventId) {
+        LOGGER.info("deleteEvent " + eventId);
         Event event = eventDao.deleteEvent(eventId);
         return event != null;
     }

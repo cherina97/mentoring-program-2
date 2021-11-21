@@ -3,9 +3,10 @@ package service.impl;
 import dao.UserDao;
 import exception.UserNotFoundException;
 import model.User;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 import service.UserService;
-import storage.Storage;
 
 import java.util.Comparator;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final Log LOGGER = LogFactory.getLog(UserServiceImpl.class);
     private final UserDao userDao;
 
     //constructor injection
@@ -23,11 +25,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(long userId) {
+        LOGGER.info("getUserById " + userId);
         return userDao.readUser(userId);
     }
 
     @Override
     public User getUserByEmail(String email) throws UserNotFoundException {
+        LOGGER.info("getUserByEmail " + email);
         return userDao.getAllUsers()
                 .stream()
                 .filter(user -> user.getEmail().equals(email))
@@ -37,6 +41,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUsersByName(String name, int pageSize, int pageNum) {
+        LOGGER.info("getUsersByName " + name);
         return userDao.getAllUsers()
                 .stream()
                 .filter(user -> user.getName().equals(name))
@@ -48,6 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) throws UserNotFoundException {
+        LOGGER.info("createUser " + user);
         Long maxId = userDao.getAllUsers().stream()
                 .max(Comparator.comparing(User::getId))
                 .map(User::getId)
@@ -61,6 +67,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(long id, User user) {
+        LOGGER.info("updateUser " + user);
         userDao.updateUser(id, user);
 
         return userDao.readUser(user.getId());
@@ -68,6 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUser(long userId) {
+        LOGGER.info("deleteUser " + userId);
         User deletedUser = userDao.deleteUser(userId);
         return deletedUser != null;
     }
