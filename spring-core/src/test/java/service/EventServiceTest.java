@@ -40,7 +40,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void getEventByNameTest() {
+    public void getEventByTitleTest() {
         assertNotNull(eventService.getEventsByTitle("Title1", 1, 1));
     }
 

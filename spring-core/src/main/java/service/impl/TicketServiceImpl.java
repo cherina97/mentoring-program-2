@@ -23,7 +23,10 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
         Ticket ticket = new TicketImpl(eventId, userId, category, place);
-        return ticketDao.createTicket(ticket);
+        ticket.setId(7);
+        ticketDao.createTicket(ticket);
+
+        return ticketDao.readTicket(7);
     }
 
     @Override

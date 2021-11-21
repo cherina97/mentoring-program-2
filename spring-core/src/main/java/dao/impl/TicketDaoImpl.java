@@ -22,8 +22,8 @@ public class TicketDaoImpl implements TicketDao {
     }
 
     @Override
-    public Ticket updateTicket(Ticket ticket) {
-        return storage.getTickets().replace(ticket.getId(), ticket);
+    public Ticket updateTicket(long id, Ticket ticket) {
+        return storage.getTickets().replace(id, ticket);
     }
 
     @Override

@@ -10,7 +10,7 @@ public interface TicketDao {
 
     Ticket readTicket(long id);
 
-    Ticket updateTicket(Ticket ticket);
+    Ticket updateTicket(long id, Ticket ticket);
 
     Ticket deleteTicket(long id);
 
