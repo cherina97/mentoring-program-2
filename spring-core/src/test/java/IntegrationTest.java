@@ -1,3 +1,6 @@
+import exception.EventNotFoundException;
+import exception.TicketNotFoundException;
+import exception.UserNotFoundException;
 import facade.BookingFacade;
 import facade.BookingFacadeImpl;
 import model.Event;
@@ -16,9 +19,9 @@ import java.util.Date;
 import java.util.List;
 
 import static model.Ticket.Category.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class integrationTest {
+public class IntegrationTest {
 
     ApplicationContext context;
     Storage storage;
@@ -32,12 +35,11 @@ public class integrationTest {
     }
 
     @Test
-    public void integrationTest() {
+    public void integrationTest() throws UserNotFoundException, EventNotFoundException, TicketNotFoundException {
         User user1 = bookingFacade.createUser(new UserImpl("name1", "email1"));
         User user2 = bookingFacade.createUser(new UserImpl("name2", "email2"));
         User user3 = bookingFacade.createUser(new UserImpl("name3", "email3"));
 
-        //todo add test for event and ticket
         Event event1 = bookingFacade.createEvent(new EventImpl("event1", new Date()));
         Event event2 = bookingFacade.createEvent(new EventImpl("event2", new Date()));
 
@@ -53,11 +55,11 @@ public class integrationTest {
         Ticket ticket8 = bookingFacade.bookTicket(user3.getId(), event2.getId(), 4, PREMIUM);
 
         List<Ticket> expectedTicketsByUser1 = Arrays.asList(ticket1, ticket2);
-        List<Ticket> actualTicketsByUser = bookingFacade.getBookedTickets(user1, 1, 1);
+        List<Ticket> actualTicketsByUser = bookingFacade.getBookedTickets(user1, 10, 1);
 
         List<Ticket> expectedTicketsByEvent1 =
                 Arrays.asList(ticket1, ticket2, ticket5, ticket6);
-        List<Ticket> actualTicketsByEvent = bookingFacade.getBookedTickets(event1, 1, 1);
+        List<Ticket> actualTicketsByEvent = bookingFacade.getBookedTickets(event1, 10, 1);
 
         assertEquals(expectedTicketsByUser1, actualTicketsByUser);
         assertEquals(expectedTicketsByEvent1, actualTicketsByEvent);
