@@ -1,5 +1,6 @@
 package service;
 
+import exception.TicketNotFoundException;
 import model.Event;
 import model.Ticket;
 import model.User;
@@ -8,7 +9,7 @@ import java.util.List;
 
 public interface TicketService {
 
-    Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category);
+    Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) throws TicketNotFoundException;
 
     List<Ticket> getBookedTickets(User user, int pageSize, int pageNum);
 

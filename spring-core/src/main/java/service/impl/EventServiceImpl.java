@@ -1,7 +1,10 @@
 package service.impl;
 
 import dao.EventDao;
+import exception.EventNotFoundException;
+import exception.UserNotFoundException;
 import model.Event;
+import model.User;
 import service.EventService;
 
 import java.util.Calendar;
@@ -58,11 +61,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event createEvent(Event event) {
-        event.setId(4);
+    public Event createEvent(Event event) throws EventNotFoundException {
+        Long maxId = eventDao.getAllEvents().stream()
+                .max(Comparator.comparing(Event::getId))
+                .map(Event::getId)
+                .orElseThrow(() -> new EventNotFoundException("There are no events in storage"));
+
+        event.setId(maxId + 1);
         eventDao.createEvent(event);
 
-        return eventDao.readEvent(4);
+        return eventDao.readEvent(event.getId());
     }
 
     @Override

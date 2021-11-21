@@ -1,5 +1,7 @@
 package facade;
 
+import exception.EventNotFoundException;
+import exception.TicketNotFoundException;
 import exception.UserNotFoundException;
 import model.Event;
 import model.Ticket;
@@ -40,7 +42,7 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public Event createEvent(Event event) {
+    public Event createEvent(Event event) throws EventNotFoundException {
         return eventService.createEvent(event);
     }
 
@@ -70,7 +72,7 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public User createUser(User user) {
+    public User createUser(User user) throws UserNotFoundException {
         return userService.createUser(user);
     }
 
@@ -85,7 +87,7 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
+    public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) throws TicketNotFoundException {
         return ticketService.bookTicket(userId, eventId, place, category);
     }
 

@@ -49,7 +49,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void createUserTest() {
+    public void createUserTest() throws UserNotFoundException {
         User user = new UserImpl("name", "email");
 
         Assert.assertEquals(user, userService.createUser(user));

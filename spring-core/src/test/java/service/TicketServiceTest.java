@@ -1,5 +1,6 @@
 package service;
 
+import exception.TicketNotFoundException;
 import model.Event;
 import model.Ticket;
 import model.User;
@@ -34,7 +35,7 @@ public class TicketServiceTest {
     }
 
     @Test
-    public void bookTicketTest() {
+    public void bookTicketTest() throws TicketNotFoundException {
         Ticket ticket = new TicketImpl(1, 1, Ticket.Category.BAR, 1);
         ticket.setId(7);
 

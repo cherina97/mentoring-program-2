@@ -1,5 +1,7 @@
 package facade;
 
+import exception.EventNotFoundException;
+import exception.TicketNotFoundException;
 import exception.UserNotFoundException;
 import model.Event;
 import model.Ticket;
@@ -49,7 +51,7 @@ public interface BookingFacade {
      * @param event Event data.
      * @return Created Event object.
      */
-    Event createEvent(Event event);
+    Event createEvent(Event event) throws EventNotFoundException;
 
     /**
      * Updates event using given data.
@@ -98,7 +100,7 @@ public interface BookingFacade {
      * @param user User data.
      * @return Created User object.
      */
-    User createUser(User user);
+    User createUser(User user) throws UserNotFoundException;
 
     /**
      * Updates user using given data.
@@ -126,7 +128,7 @@ public interface BookingFacade {
      * @return Booked ticket object.
      * @throws java.lang.IllegalStateException if this place has already been booked.
      */
-    Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category);
+    Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) throws TicketNotFoundException;
 
     /**
      * Get all booked tickets for specified user. Tickets should be sorted by event date in descending order.

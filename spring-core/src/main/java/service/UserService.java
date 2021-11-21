@@ -13,7 +13,7 @@ public interface UserService {
 
     List<User> getUsersByName(String name, int pageSize, int pageNum);
 
-    User createUser(User user);
+    User createUser(User user) throws UserNotFoundException;
 
     User updateUser(long id, User user);
 

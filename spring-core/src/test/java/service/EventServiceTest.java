@@ -45,7 +45,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void createEventTest() {
+    public void createEventTest() throws EventNotFoundException {
         Event event = new EventImpl("Title1", new Date());
 
         Assert.assertEquals(event, eventService.createEvent(event));

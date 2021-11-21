@@ -1,5 +1,6 @@
 package service;
 
+import exception.EventNotFoundException;
 import model.Event;
 
 import java.util.Date;
@@ -13,7 +14,7 @@ public interface EventService {
 
     List<Event> getEventsForDay(Date day, int pageSize, int pageNum);
 
-    Event createEvent(Event event);
+    Event createEvent(Event event) throws EventNotFoundException;
 
     Event updateEvent(long id, Event event);
 
