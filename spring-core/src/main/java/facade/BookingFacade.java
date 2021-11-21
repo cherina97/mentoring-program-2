@@ -57,7 +57,7 @@ public interface BookingFacade {
      * @param event Event data for update. Should have id set.
      * @return Updated Event object.
      */
-    Event updateEvent(Event event);
+    Event updateEvent(long id, Event event);
 
     /**
      * Deletes event by its id.

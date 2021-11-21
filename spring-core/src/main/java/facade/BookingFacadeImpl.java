@@ -45,8 +45,8 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public Event updateEvent(Event event) {
-        return eventService.updateEvent(event);
+    public Event updateEvent(long id, Event event) {
+        return eventService.updateEvent(id, event);
     }
 
     @Override

@@ -27,8 +27,8 @@ public class EventDaoImpl implements EventDao {
     }
 
     @Override
-    public Event updateEvent(Event event) {
-        return storage.getEvents().replace(event.getId(), event);
+    public Event updateEvent(long id, Event event) {
+        return storage.getEvents().replace(id, event);
     }
 
     @Override

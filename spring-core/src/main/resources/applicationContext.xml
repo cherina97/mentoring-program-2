@@ -26,4 +26,19 @@
         <constructor-arg name="userDao" ref="userDao"/>
     </bean>
 
+    <bean id="eventService" class="service.impl.EventServiceImpl">
+        <constructor-arg name="eventDao" ref="eventDao"/>
+    </bean>
+
+    <bean id="ticketService" class="service.impl.TicketServiceImpl">
+        <constructor-arg name="ticketDao" ref="ticketDao"/>
+    </bean>
+
+
+    <bean id="bookingFacade" class="facade.BookingFacadeImpl">
+        <constructor-arg name="userService" ref="userService"/>
+        <constructor-arg name="eventService" ref="eventService"/>
+        <constructor-arg name="ticketService" ref="ticketService"/>
+    </bean>
+
 </beans>

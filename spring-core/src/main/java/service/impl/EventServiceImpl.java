@@ -59,12 +59,17 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event createEvent(Event event) {
-        return eventDao.createEvent(event);
+        event.setId(4);
+        eventDao.createEvent(event);
+
+        return eventDao.readEvent(4);
     }
 
     @Override
-    public Event updateEvent(Event event) {
-        return eventDao.updateEvent(event);
+    public Event updateEvent(long id, Event event) {
+        eventDao.updateEvent(id, event);
+
+        return eventDao.readEvent(id);
     }
 
     @Override

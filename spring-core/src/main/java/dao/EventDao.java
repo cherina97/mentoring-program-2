@@ -10,7 +10,7 @@ public interface EventDao {
 
     Event readEvent(long id);
 
-    Event updateEvent(Event event);
+    Event updateEvent(long id, Event event);
 
     Event deleteEvent(long id);
 
