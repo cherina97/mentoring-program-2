@@ -16,6 +16,7 @@
         <module>module-io-nio</module>
         <module>module-database</module>
         <module>spring-core</module>
+        <module>spting-mvc</module>
     </modules>
 
     <properties>
