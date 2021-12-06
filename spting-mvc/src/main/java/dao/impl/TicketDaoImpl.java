@@ -2,14 +2,20 @@ package dao.impl;
 
 import dao.TicketDao;
 import model.Ticket;
+import org.springframework.stereotype.Repository;
 import storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class TicketDaoImpl implements TicketDao {
 
-    private Storage storage;
+    private final Storage storage;
+
+    public TicketDaoImpl(Storage storage) {
+        this.storage = storage;
+    }
 
     @Override
     public Ticket createTicket(Ticket ticket) {
@@ -34,10 +40,5 @@ public class TicketDaoImpl implements TicketDao {
     @Override
     public List<Ticket> getAllTickets() {
         return new ArrayList<>(storage.getTickets().values());
-    }
-
-    //setter injection in xml
-    public void setStorage(Storage storage) {
-        this.storage = storage;
     }
 }

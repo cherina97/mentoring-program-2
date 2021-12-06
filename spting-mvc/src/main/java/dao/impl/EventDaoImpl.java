@@ -2,17 +2,18 @@ package dao.impl;
 
 import dao.EventDao;
 import model.Event;
+import org.springframework.stereotype.Repository;
 import storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class EventDaoImpl implements EventDao {
 
-    private Storage storage;
+    private final Storage storage;
 
-    //setter injection in xml
-    public void setStorage(Storage storage) {
+    public EventDaoImpl(Storage storage) {
         this.storage = storage;
     }
 

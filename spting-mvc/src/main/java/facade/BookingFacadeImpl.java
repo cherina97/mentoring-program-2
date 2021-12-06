@@ -6,6 +6,7 @@ import exception.UserNotFoundException;
 import model.Event;
 import model.Ticket;
 import model.User;
+import org.springframework.stereotype.Service;
 import service.EventService;
 import service.TicketService;
 import service.UserService;
@@ -13,13 +14,13 @@ import service.UserService;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class BookingFacadeImpl implements BookingFacade {
 
     private final UserService userService;
     private final EventService eventService;
     private final TicketService ticketService;
 
-    //constructor injection
     public BookingFacadeImpl(UserService userService, EventService eventService, TicketService ticketService) {
         this.userService = userService;
         this.eventService = eventService;

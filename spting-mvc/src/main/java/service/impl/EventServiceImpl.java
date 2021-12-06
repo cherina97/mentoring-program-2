@@ -5,6 +5,7 @@ import exception.EventNotFoundException;
 import model.Event;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 import service.EventService;
 
 import java.util.Calendar;
@@ -13,12 +14,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class EventServiceImpl implements EventService {
 
     private static final Log LOGGER = LogFactory.getLog(EventServiceImpl.class);
     private final EventDao eventDao;
 
-    //constructor injection
     public EventServiceImpl(EventDao eventDao) {
         this.eventDao = eventDao;
     }

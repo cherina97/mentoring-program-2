@@ -2,14 +2,20 @@ package dao.impl;
 
 import dao.UserDao;
 import model.User;
+import org.springframework.stereotype.Repository;
 import storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository
 public class UserDaoImpl implements UserDao {
 
-    private Storage storage;
+    private final Storage storage;
+
+    public UserDaoImpl(Storage storage) {
+        this.storage = storage;
+    }
 
     @Override
     public User createUser(User user) {
@@ -36,8 +42,4 @@ public class UserDaoImpl implements UserDao {
         return new ArrayList<>(storage.getUsers().values());
     }
 
-    //setter injection in xml
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
 }

@@ -18,7 +18,6 @@ public class UserServiceImpl implements UserService {
     private static final Log LOGGER = LogFactory.getLog(UserServiceImpl.class);
     private final UserDao userDao;
 
-    //constructor injection
     public UserServiceImpl(UserDao userDao) {
         this.userDao = userDao;
     }
