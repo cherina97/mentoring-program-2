@@ -1,10 +1,15 @@
 package com.epam.config;
 
+import com.epam.service.xml.TicketXml;
+import com.epam.service.xml.TicketsListXml;
+import com.epam.service.xml.XmlToObjectConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,6 +20,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
 @ComponentScan("com.epam")
+@PropertySource("classpath:app.properties")
 @EnableWebMvc
 public class WebConfiguration implements WebMvcConfigurer {
 
@@ -57,4 +63,24 @@ public class WebConfiguration implements WebMvcConfigurer {
         viewResolver.setBasename("views");
         return viewResolver;
     }
+
+    @Bean
+    public Jaxb2Marshaller jaxb2Marshaller() {
+        Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
+        marshaller.setClassesToBeBound(
+                TicketXml.class,
+                TicketsListXml.class);
+
+        return marshaller;
+    }
+
+    @Bean
+    public XmlToObjectConverter xmlToObjectConverter() {
+        XmlToObjectConverter xmlToObjectConverter = new XmlToObjectConverter();
+        xmlToObjectConverter.setMarshaller(jaxb2Marshaller());
+
+        return xmlToObjectConverter;
+    }
+
+    //https://stackoverflow.com/questions/44676532/how-to-use-spring-to-marshal-and-unmarshal-xml/44678803
 }

@@ -1,7 +1,5 @@
 package com.epam.facade;
 
-import com.epam.exception.EventNotFoundException;
-import com.epam.exception.TicketNotFoundException;
 import com.epam.exception.UserNotFoundException;
 import com.epam.model.Event;
 import com.epam.model.Ticket;
@@ -163,5 +161,7 @@ public interface BookingFacade {
     List<Event> getAllEvents();
 
     List<Ticket> getAllTickets();
+
+    void preloadTickets();
 
 }

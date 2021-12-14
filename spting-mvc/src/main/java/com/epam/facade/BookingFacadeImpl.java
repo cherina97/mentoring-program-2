@@ -1,15 +1,14 @@
 package com.epam.facade;
 
-import com.epam.exception.EventNotFoundException;
-import com.epam.exception.TicketNotFoundException;
 import com.epam.exception.UserNotFoundException;
 import com.epam.model.Event;
 import com.epam.model.Ticket;
 import com.epam.model.User;
-import org.springframework.stereotype.Service;
 import com.epam.service.EventService;
 import com.epam.service.TicketService;
 import com.epam.service.UserService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -107,7 +106,7 @@ public class BookingFacadeImpl implements BookingFacade {
         return ticketService.cancelTicket(ticketId);
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
@@ -119,5 +118,10 @@ public class BookingFacadeImpl implements BookingFacade {
     @Override
     public List<Ticket> getAllTickets() {
         return ticketService.getAllTickets();
+    }
+
+    @Override
+    public void preloadTickets() {
+        ticketService.preloadTickets();
     }
 }
