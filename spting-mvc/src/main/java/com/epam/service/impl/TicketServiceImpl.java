@@ -34,10 +34,9 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @PostConstruct
-    public void init(){
+    public void init() {
         preloadTickets();
     }
-
 
     //todo add validation for user id and event id
     @Override

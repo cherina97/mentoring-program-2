@@ -1,5 +1,6 @@
 package com.epam.service.xml;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 
 import javax.xml.transform.stream.StreamSource;
@@ -10,7 +11,9 @@ import java.util.List;
 public class XmlToObjectConverter {
 
     private Jaxb2Marshaller marshaller;
-    private static final String FILE_NAME = "C:\\Users\\cheri\\IdeaProjects\\LearnJava8\\spting-mvc\\src\\main\\resources\\tickets.xml";
+
+    @Value("${app.tickets}")
+    private String FILE_NAME;
 
     public void setMarshaller(Jaxb2Marshaller marshaller) {
         this.marshaller = marshaller;
@@ -23,7 +26,6 @@ public class XmlToObjectConverter {
         try (FileInputStream is = new FileInputStream(FILE_NAME)) {
             ticketsListXml = (TicketsListXml) this.marshaller.unmarshal(new StreamSource(is));
         }
-//        System.out.println(ticketsListXml.getTickets());
         return ticketsListXml.getTickets();
     }
 }
