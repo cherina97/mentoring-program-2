@@ -9,7 +9,7 @@ public interface UserService {
 
     User getUserById(long userId);
 
-    User getUserByEmail(String email) throws UserNotFoundException;
+    User getUserByEmail(String email);
 
     List<User> getUsersByName(String name, int pageSize, int pageNum);
 

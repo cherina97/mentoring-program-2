@@ -1,7 +1,6 @@
 package com.epam.service.impl;
 
 import com.epam.dao.EventDao;
-import com.epam.exception.EventNotFoundException;
 import com.epam.model.Event;
 import com.epam.service.EventService;
 import org.apache.commons.logging.Log;

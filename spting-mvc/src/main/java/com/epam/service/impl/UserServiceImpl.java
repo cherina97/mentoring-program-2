@@ -1,11 +1,13 @@
 package com.epam.service.impl;
 
 import com.epam.dao.UserDao;
+import com.epam.exception.GlobalApplicationException;
 import com.epam.exception.UserNotFoundException;
 import com.epam.model.User;
 import com.epam.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -26,11 +28,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(long userId) {
         LOGGER.info("getUserById " + userId);
-        return userDao.readUser(userId);
+        return userDao.getAllUsers()
+                .stream()
+                .filter(user -> user.getId() == userId)
+                .findFirst()
+                .orElseThrow(() -> new UserNotFoundException("User not found by id " + userId));
     }
 
     @Override
-    public User getUserByEmail(String email) throws UserNotFoundException {
+    public User getUserByEmail(String email) {
         LOGGER.info("getUserByEmail " + email);
         return userDao.getAllUsers()
                 .stream()
@@ -55,7 +61,7 @@ public class UserServiceImpl implements UserService {
     public User createUser(User user) {
         if (isEmailNotUnique(user.getEmail())) {
             LOGGER.error("Email is not unique");
-            throw new IllegalStateException("User with such email is already present");
+            throw new GlobalApplicationException("User with such email is already present");
         }
 
         Optional<Long> maxId = userDao.getAllUsers().stream()
@@ -86,7 +92,7 @@ public class UserServiceImpl implements UserService {
 
         if (isEmailNotUnique(user.getEmail())) {
             LOGGER.error("Email is not unique");
-            throw new IllegalStateException("User with such email is already present");
+            throw new GlobalApplicationException("User with such email is already present");
         }
         userDao.getAllUsers().stream()
                 .max(Comparator.comparing(User::getId))
@@ -103,7 +109,7 @@ public class UserServiceImpl implements UserService {
         return deletedUser != null;
     }
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userDao.getAllUsers();
     }
 }

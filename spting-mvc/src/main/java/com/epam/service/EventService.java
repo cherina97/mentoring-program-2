@@ -1,6 +1,5 @@
 package com.epam.service;
 
-import com.epam.exception.EventNotFoundException;
 import com.epam.model.Event;
 
 import java.util.Date;

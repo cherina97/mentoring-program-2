@@ -2,7 +2,6 @@ package com.epam.controller;
 
 import com.epam.facade.BookingFacade;
 import com.epam.model.User;
-import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/users")
@@ -40,27 +38,17 @@ public class UserController {
     @GetMapping("/getById/{id}")
     public ModelAndView getUserById(@PathVariable long id) {
         ModelAndView modelAndView = new ModelAndView(TEMPLATE);
+        modelAndView.addObject("userModel", bookingFacade.getUserById(id));
 
-        User userById = bookingFacade.getUserById(id);
-        if (Objects.nonNull(userById)) {
-            modelAndView.addObject("userModel", userById);
-        } else {
-            modelAndView.addObject("userModel", "User not found with id = " + id);
-        }
         return modelAndView;
     }
 
-    @SneakyThrows
+
     @GetMapping("/getByEmail/{email}")
     public ModelAndView getUserByEmail(@PathVariable String email) {
         ModelAndView modelAndView = new ModelAndView(TEMPLATE);
+        modelAndView.addObject("userModel", bookingFacade.getUserByEmail(email));
 
-        User userByEmail = bookingFacade.getUserByEmail(email);
-        if (userByEmail != null) {
-            modelAndView.addObject("userModel", userByEmail);
-        } else {
-            modelAndView.addObject("userModel", "User not found with email = " + email);
-        }
         return modelAndView;
     }
 
