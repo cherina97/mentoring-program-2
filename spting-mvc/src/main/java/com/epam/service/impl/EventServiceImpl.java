@@ -3,17 +3,16 @@ package com.epam.service.impl;
 import com.epam.dao.EventDao;
 import com.epam.model.Event;
 import com.epam.service.EventService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class EventServiceImpl implements EventService {
 
-    private static final Log LOGGER = LogFactory.getLog(EventServiceImpl.class);
     private final EventDao eventDao;
 
     public EventServiceImpl(EventDao eventDao) {
@@ -22,13 +21,13 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getById(long id) {
-        LOGGER.info("getById event " + id);
+        log.info("getById event " + id);
         return eventDao.readEvent(id);
     }
 
     @Override
     public List<Event> getEventsByTitle(String title, int pageSize, int pageNum) {
-        LOGGER.info("getEventsByTitle " + title);
+        log.info("getEventsByTitle " + title);
         return eventDao.getAllEvents()
                 .stream()
                 .filter(event -> event.getTitle().equals(title))
@@ -40,7 +39,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> getEventsForDay(Date day, int pageSize, int pageNum) {
-        LOGGER.info("getEventsForDay " + day);
+        log.info("getEventsForDay " + day);
         int dayOfWeekFromDate = getDayOfWeekFromDate(day);
 
         return eventDao.getAllEvents()
@@ -73,13 +72,13 @@ public class EventServiceImpl implements EventService {
             event.setId(1L);
         }
 
-        LOGGER.info("created event " + event);
+        log.info("created event " + event);
         return eventDao.createEvent(event);
     }
 
     @Override
     public Event updateEvent(long id, Event event) {
-        LOGGER.info("updateEvent " + event);
+        log.info("updateEvent " + event);
 
         eventDao.getAllEvents().stream()
                 .max(Comparator.comparing(Event::getId))
@@ -91,7 +90,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public boolean deleteEvent(long eventId) {
-        LOGGER.info("deleteEvent " + eventId);
+        log.info("deleteEvent " + eventId);
         Event event = eventDao.deleteEvent(eventId);
         return event != null;
     }

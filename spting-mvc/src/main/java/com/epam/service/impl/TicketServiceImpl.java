@@ -10,8 +10,6 @@ import com.epam.service.xml.TicketXml;
 import com.epam.service.xml.XmlToObjectConverter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -24,7 +22,6 @@ import java.util.stream.Collectors;
 @Service
 public class TicketServiceImpl implements TicketService {
 
-    private static final Log LOGGER = LogFactory.getLog(TicketServiceImpl.class);
     private final TicketDao ticketDao;
     private final XmlToObjectConverter converter;
 
@@ -58,7 +55,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getBookedTickets(User user, int pageSize, int pageNum) {
-        LOGGER.info("getBookedTickets by user " + user);
+        log.info("getBookedTickets by user " + user);
         return ticketDao.getAllTickets()
                 .stream()
                 .filter(ticket -> ticket.getUserId() == user.getId())
@@ -70,7 +67,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getBookedTickets(Event event, int pageSize, int pageNum) {
-        LOGGER.info("getBookedTickets by event " + event);
+        log.info("getBookedTickets by event " + event);
         return ticketDao.getAllTickets()
                 .stream()
                 .filter(ticket -> ticket.getEventId() == event.getId())
@@ -82,7 +79,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public boolean cancelTicket(long ticketId) {
-        LOGGER.info("cancelTicket " + ticketId);
+        log.info("cancelTicket " + ticketId);
         Ticket ticket = ticketDao.deleteTicket(ticketId);
         return ticket != null;
     }

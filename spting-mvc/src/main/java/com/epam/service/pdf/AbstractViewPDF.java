@@ -3,6 +3,7 @@ package com.epam.service.pdf;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.view.AbstractView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
+@Slf4j
 public abstract class AbstractViewPDF extends AbstractView {
 
     public AbstractViewPDF() {
@@ -23,20 +25,20 @@ public abstract class AbstractViewPDF extends AbstractView {
 
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        // IE workaround: write into byte array first.
+        log.info("IE workaround: write into byte array first.");
         ByteArrayOutputStream baos = createTemporaryOutputStream();
 
-        // Apply preferences and build metadata.
+        log.info("Apply preferences and build metadata.");
         Document document = new Document(PageSize.A4);
         PdfWriter writer = PdfWriter.getInstance(document, baos);
         buildPdfMetadata(model, document, request);
 
-        // Build PDF document.
+        log.info("Build PDF document.");
         document.open();
         buildPdfDocument(model, document, writer, request, response);
         document.close();
 
-        // Flush to HTTP response.
+        log.info("Flush to HTTP response.");
         writeToResponse(response, baos);
     }
 
