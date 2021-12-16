@@ -8,7 +8,6 @@ import com.epam.service.EventService;
 import com.epam.service.TicketService;
 import com.epam.service.UserService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
