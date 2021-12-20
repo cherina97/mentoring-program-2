@@ -17,6 +17,7 @@
         <module>module-database</module>
         <module>spring-core</module>
         <module>spting-mvc</module>
+        <module>spring-boot</module>
     </modules>
 
     <properties>
