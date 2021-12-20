@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
+@Component
 public class XmlToObjectConverter {
 
     private Jaxb2Marshaller marshaller;
