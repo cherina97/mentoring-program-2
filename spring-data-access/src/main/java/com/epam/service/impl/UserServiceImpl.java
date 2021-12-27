@@ -1,113 +1,89 @@
-package com.epam.service.impl;
-
-import com.epam.dao.UserDao;
-import com.epam.exception.GlobalApplicationException;
-import com.epam.exception.UserNotFoundException;
-import com.epam.model.User;
-import com.epam.service.UserService;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-@Slf4j
-@Service
-public class UserServiceImpl implements UserService {
-
-    private final UserDao userDao;
-
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
-    }
-
-    @Override
-    public User getUserById(long userId) {
-        log.info("getUserById " + userId);
-        return userDao.getAllUsers()
-                .stream()
-                .filter(user -> user.getId() == userId)
-                .findFirst()
-                .orElseThrow(() -> new UserNotFoundException("User not found by id " + userId));
-    }
-
-    @Override
-    public User getUserByEmail(String email) {
-        log.info("getUserByEmail " + email);
-        return userDao.getAllUsers()
-                .stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findFirst()
-                .orElseThrow(() -> new UserNotFoundException("User not found by email " + email));
-    }
-
-    @Override
-    public List<User> getUsersByName(String name, int pageSize, int pageNum) {
-        log.info("getUsersByName " + name);
-        return userDao.getAllUsers()
-                .stream()
-                .filter(user -> user.getName().equals(name))
-                .sorted(Comparator.comparing(User::getId))
-                .skip(((long) pageSize * pageNum) - pageSize)
-                .limit(pageSize)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public User createUser(User user) {
-        if (isEmailNotUnique(user.getEmail())) {
-            log.error("Email is not unique");
-            throw new GlobalApplicationException("User with such email is already present");
-        }
-
-        Optional<Long> maxId = userDao.getAllUsers().stream()
-                .max(Comparator.comparing(User::getId))
-                .map(User::getId);
-
-        if (maxId.isPresent()) {
-            user.setId(maxId.get() + 1L);
-        } else {
-            user.setId(1L);
-        }
-
-        log.info("created user:  " + user);
-        return userDao.createUser(user);
-    }
-
-    private boolean isEmailNotUnique(String email) {
-        Optional<User> foundEmail = userDao.getAllUsers().stream()
-                .filter(user -> user.getEmail().equals(email))
-                .findAny();
-
-        return foundEmail.isPresent();
-    }
-
-    @Override
-    public User updateUser(long id, User user) {
-        log.info("updateUser " + user);
-
-        if (isEmailNotUnique(user.getEmail())) {
-            log.error("Email is not unique");
-            throw new GlobalApplicationException("User with such email is already present");
-        }
-        userDao.getAllUsers().stream()
-                .max(Comparator.comparing(User::getId))
-                .map(User::getId)
-                .ifPresent(user::setId);
-
-        return userDao.updateUser(id, user);
-    }
-
-    @Override
-    public boolean deleteUser(long userId) {
-        log.info("deleteUser " + userId);
-        User deletedUser = userDao.deleteUser(userId);
-        return deletedUser != null;
-    }
-
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
-    }
-}
+//package com.epam.service.impl;
+//
+//import com.epam.dao.UserRepository;
+//import com.epam.exception.GlobalApplicationException;
+//import com.epam.exception.UserNotFoundException;
+//import com.epam.model.User;
+//import com.epam.service.UserService;
+//import lombok.extern.slf4j.Slf4j;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.List;
+//import java.util.Optional;
+//
+//@Slf4j
+//@Service
+//public class UserServiceImpl implements UserService {
+//
+//    private final UserRepository userDao;
+//
+//    public UserServiceImpl(UserRepository userDao) {
+//        this.userDao = userDao;
+//    }
+//
+//    @Override
+//    public User getUserById(long userId) {
+//        log.info("getting user by id  " + userId);
+//
+//        return userDao.findById(userId)
+//                .orElseThrow(() -> new UserNotFoundException("User not found by id " + userId));
+//    }
+//
+//    @Override
+//    public User getUserByEmail(String email) {
+//        log.info("getting user by email " + email);
+//
+//        return userDao.findByEmail(email)
+//                .orElseThrow(() -> new UserNotFoundException("User not found by email " + email));
+//    }
+//
+//    @Override
+//    public List<User> getUsersByName(String name) {
+//        log.info("getting users by name " + name);
+//        return userDao.findAllByName(name);
+//    }
+//
+//    @Override
+//    public User createUser(User user) {
+//        log.info("creating user:  " + user);
+//
+//        if (userDao.findByEmail(user.getEmail()).isPresent()) {
+//            log.error("Email is not unique");
+//            throw new GlobalApplicationException("User with such email is already present");
+//        }
+//
+//        return userDao.save(user);
+//    }
+//
+//    @Override
+//    public User updateUser(User user) {
+//        log.info("updateUser " + user);
+//
+//        if (userDao.findByEmail(user.getEmail()).isPresent()) {
+//            log.error("Email is not unique");
+//            throw new GlobalApplicationException("User with such email is already present");
+//        }
+//
+//        Optional<User> userById = userDao.findById(user.getId());
+//        if (userById.isPresent()){
+//            userById.get().setEmail(user.getEmail());
+//            userById.get().setName(user.getName());
+//
+//            return userDao.save(userById.get());
+//        } else {
+//            throw new GlobalApplicationException("User updating error");
+//        }
+//    }
+//
+//    @Override
+//    public void deleteUser(long userId) {
+//        log.info("deleting user by id " + userId);
+//
+//        userDao.deleteById(userId);
+//    }
+//
+//    public List<User> getAllUsers() {
+//        log.info("getting all users");
+//        return (List<User>) userDao.findAll();
+//    }
+//}

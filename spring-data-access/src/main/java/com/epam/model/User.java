@@ -1,32 +1,63 @@
 package com.epam.model;
 
-import com.epam.model.impl.UserImpl;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-/**
- * Created by maksym_govorischev on 14/03/14.
- */
-@JsonDeserialize(as = UserImpl.class)
-public interface User {
-    /**
-     * User Id. UNIQUE.
-     *
-     * @return User Id.
-     */
-    long getId();
+import javax.persistence.*;
 
-    void setId(long id);
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
+public class User {
 
-    String getName();
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnoreProperties
+    private long id;
 
-    void setName(String name);
+    @Column
+    private String name;
 
-    /**
-     * User email. UNIQUE.
-     *
-     * @return User email.
-     */
-    String getEmail();
+    @Column
+    private String email;
 
-    void setEmail(String email);
+    public User(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "UserImpl{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

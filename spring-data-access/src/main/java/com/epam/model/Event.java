@@ -1,29 +1,62 @@
-package com.epam.model;
-
-import com.epam.model.impl.EventImpl;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import java.util.Date;
-
-/**
- * Created by maksym_govorischev.
- */
-@JsonDeserialize(as = EventImpl.class)
-public interface Event {
-    /**
-     * Event id. UNIQUE.
-     *
-     * @return Event Id
-     */
-    long getId();
-
-    void setId(long id);
-
-    String getTitle();
-
-    void setTitle(String title);
-
-    Date getDate();
-
-    void setDate(Date date);
-}
+//package com.epam.model;
+//
+//import lombok.AllArgsConstructor;
+//import lombok.NoArgsConstructor;
+//
+//import javax.persistence.*;
+//import java.util.Date;
+//
+//@NoArgsConstructor
+//@AllArgsConstructor
+//@Entity
+//@Table(name = "events")
+//public class Event {
+//
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private long id;
+//
+//    @Column
+//    private String title;
+//
+//    @Column
+//    private Date date;
+//
+//    public Event(String title, Date date) {
+//        this.title = title;
+//        this.date = date;
+//    }
+//
+//    public long getId() {
+//        return id;
+//    }
+//
+//    public void setId(long id) {
+//        this.id = id;
+//    }
+//
+//    public String getTitle() {
+//        return title;
+//    }
+//
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
+//
+//    public Date getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(Date date) {
+//        this.date = date;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "EventImpl{" +
+//                "id=" + id +
+//                ", title='" + title + '\'' +
+//                ", date=" + date +
+//                '}';
+//    }
+//}
