@@ -25,17 +25,17 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) throws TicketNotFoundException {
-        Long maxId = ticketDao.getAllTickets().stream()
+    public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
+        LOGGER.info("booking ticket");
+        Ticket ticket = new TicketImpl(eventId, userId, category, place);
+
+        ticket.setId(ticketDao.getAllTickets().stream()
                 .max(Comparator.comparing(Ticket::getId))
                 .map(Ticket::getId)
-                .orElseThrow(() -> new TicketNotFoundException("There are no tickets in storage"));
-
-        Ticket ticket = new TicketImpl(eventId, userId, category, place);
-        LOGGER.info("bookTicket" + ticket);
-        ticket.setId(maxId + 1);
+                .orElse(0L) + 1L);
         ticketDao.createTicket(ticket);
 
+        LOGGER.info("ticket was booked " + ticket);
         return ticketDao.readTicket(ticket.getId());
     }
 

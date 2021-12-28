@@ -1,7 +1,6 @@
 package service.impl;
 
 import dao.EventDao;
-import exception.EventNotFoundException;
 import model.Event;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,16 +64,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event createEvent(Event event) throws EventNotFoundException {
-        LOGGER.info("createEvent " + event);
-        Long maxId = eventDao.getAllEvents().stream()
+    public Event createEvent(Event event) {
+        LOGGER.info("creating Event " + event);
+
+        event.setId(eventDao.getAllEvents().stream()
                 .max(Comparator.comparing(Event::getId))
                 .map(Event::getId)
-                .orElseThrow(() -> new EventNotFoundException("There are no events in storage"));
-
-        event.setId(maxId + 1);
+                .orElse(0L) + 1L);
         eventDao.createEvent(event);
 
+        LOGGER.info("event was created " + event);
         return eventDao.readEvent(event.getId());
     }
 

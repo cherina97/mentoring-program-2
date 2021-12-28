@@ -52,16 +52,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) throws UserNotFoundException {
-        LOGGER.info("createUser " + user);
-        Long maxId = userDao.getAllUsers().stream()
+    public User createUser(User user) {
+        LOGGER.info("creating user  " + user);
+
+        user.setId(userDao.getAllUsers().stream()
                 .max(Comparator.comparing(User::getId))
                 .map(User::getId)
-                .orElseThrow(() -> new UserNotFoundException("There are no users in storage"));
+                .orElse(0L) + 1L);
 
-        user.setId(maxId + 1);
         userDao.createUser(user);
-
+        LOGGER.info("user was created  " + user);
         return userDao.readUser(user.getId());
     }
 
@@ -69,14 +69,15 @@ public class UserServiceImpl implements UserService {
     public User updateUser(long id, User user) {
         LOGGER.info("updateUser " + user);
         userDao.updateUser(id, user);
-
+        LOGGER.info("user was updated " + user);
         return userDao.readUser(user.getId());
     }
 
     @Override
     public boolean deleteUser(long userId) {
-        LOGGER.info("deleteUser " + userId);
+        LOGGER.info("delete User " + userId);
         User deletedUser = userDao.deleteUser(userId);
+        LOGGER.info("delete User " + userId);
         return deletedUser != null;
     }
 }

@@ -64,4 +64,12 @@ public class IntegrationTest {
         assertEquals(expectedTicketsByUser1, actualTicketsByUser);
         assertEquals(expectedTicketsByEvent1, actualTicketsByEvent);
     }
+
+    @Test
+    public void integrationTest2() throws UserNotFoundException {
+        User user = bookingFacade.createUser(new UserImpl("name1", "email1"));
+
+        System.out.println(user.getId());
+
+    }
 }
