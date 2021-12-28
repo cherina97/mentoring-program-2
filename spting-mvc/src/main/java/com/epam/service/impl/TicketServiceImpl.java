@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -38,18 +37,15 @@ public class TicketServiceImpl implements TicketService {
     //todo add validation for user id and event id
     @Override
     public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
-        Optional<Long> maxId = ticketDao.getAllTickets().stream()
-                .max(Comparator.comparing(Ticket::getId))
-                .map(Ticket::getId);
-
+        log.info("creating ticket");
         Ticket ticket = new TicketImpl(eventId, userId, category, place);
 
-        if (maxId.isPresent()) {
-            ticket.setId(maxId.get() + 1L);
-        } else {
-            ticket.setId(1L);
-        }
+        ticket.setId(ticketDao.getAllTickets().stream()
+                .max(Comparator.comparing(Ticket::getId))
+                .map(Ticket::getId)
+                .orElse(0L) + 1L);
 
+        log.info("ticket was created " + ticket);
         return ticketDao.createTicket(ticket);
     }
 

@@ -6,7 +6,10 @@ import com.epam.service.EventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,17 +65,14 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event createEvent(Event event) {
-        Optional<Long> maxId = eventDao.getAllEvents().stream()
+        log.info("creating event " + event);
+
+        event.setId(eventDao.getAllEvents().stream()
                 .max(Comparator.comparing(Event::getId))
-                .map(Event::getId);
+                .map(Event::getId)
+                .orElse(0L) + 1L);
 
-        if (maxId.isPresent()) {
-            event.setId(maxId.get() + 1L);
-        } else {
-            event.setId(1L);
-        }
-
-        log.info("created event " + event);
+        log.info("event was created " + event);
         return eventDao.createEvent(event);
     }
 
@@ -85,6 +85,7 @@ public class EventServiceImpl implements EventService {
                 .map(Event::getId)
                 .ifPresent(event::setId);
 
+        log.info("event was updated " + event);
         return eventDao.updateEvent(id, event);
     }
 

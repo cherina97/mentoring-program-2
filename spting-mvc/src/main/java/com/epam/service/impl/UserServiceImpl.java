@@ -57,20 +57,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        log.info("creating user " + user);
         if (isEmailNotUnique(user.getEmail())) {
             log.error("Email is not unique");
             throw new GlobalApplicationException("User with such email is already present");
         }
 
-        Optional<Long> maxId = userDao.getAllUsers().stream()
+        user.setId(userDao.getAllUsers().stream()
                 .max(Comparator.comparing(User::getId))
-                .map(User::getId);
-
-        if (maxId.isPresent()) {
-            user.setId(maxId.get() + 1L);
-        } else {
-            user.setId(1L);
-        }
+                .map(User::getId)
+                .orElse(0L) + 1L);
 
         log.info("created user:  " + user);
         return userDao.createUser(user);
@@ -86,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(long id, User user) {
-        log.info("updateUser " + user);
+        log.info("updating user " + user);
 
         if (isEmailNotUnique(user.getEmail())) {
             log.error("Email is not unique");
@@ -97,6 +93,7 @@ public class UserServiceImpl implements UserService {
                 .map(User::getId)
                 .ifPresent(user::setId);
 
+        log.info("user was updated " + user);
         return userDao.updateUser(id, user);
     }
 
