@@ -7,9 +7,10 @@ create table users
 
 create table events
 (
-    id    serial       not null primary key,
-    title varchar(255) not null,
-    date  date         not null
+    id           serial       not null primary key,
+    title        varchar(255) not null,
+    date         date         not null,
+    ticket_price decimal      not null
 );
 
 create table tickets
@@ -19,4 +20,11 @@ create table tickets
     user_id  integer references users (id),
     category varchar(255) not null,
     place    integer      not null
+);
+
+create table users_accounts
+(
+    id      serial not null primary key,
+    user_id integer references users (id) unique,
+    money   decimal
 );

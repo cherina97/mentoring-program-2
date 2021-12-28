@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ExceptionHandlerControllerAdvice {
 
-    @ExceptionHandler({UserNotFoundException.class, EventNotFoundException.class, TicketNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, EventNotFoundException.class, TicketNotFoundException.class,
+            UserAccountNotFoundException.class})
     public ResponseEntity<String> handleApplicationException(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }

@@ -1,16 +1,15 @@
 package com.epam.facade;
 
 import com.epam.exception.UserNotFoundException;
-import com.epam.model.Category;
-import com.epam.model.Event;
-import com.epam.model.Ticket;
-import com.epam.model.User;
+import com.epam.model.*;
 import com.epam.service.EventService;
 import com.epam.service.TicketService;
+import com.epam.service.UserAccountService;
 import com.epam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,12 +19,14 @@ public class BookingFacadeImpl implements BookingFacade {
     private final UserService userService;
     private final EventService eventService;
     private final TicketService ticketService;
+    private final UserAccountService userAccountService;
 
     @Autowired
-    public BookingFacadeImpl(UserService userService, EventService eventService, TicketService ticketService) {
+    public BookingFacadeImpl(UserService userService, EventService eventService, TicketService ticketService, UserAccountService userAccountService) {
         this.userService = userService;
         this.eventService = eventService;
         this.ticketService = ticketService;
+        this.userAccountService = userAccountService;
     }
 
     @Override
@@ -120,5 +121,25 @@ public class BookingFacadeImpl implements BookingFacade {
     @Override
     public List<Ticket> getAllTickets() {
         return ticketService.getAllTickets();
+    }
+
+    @Override
+    public UserAccount createUserAccount(UserAccount userAccount) {
+        return userAccountService.createUserAccount(userAccount);
+    }
+
+    @Override
+    public UserAccount getUserAccountById(long id) {
+        return userAccountService.getUserAccountById(id);
+    }
+
+    @Override
+    public UserAccount getUserAccountByUserId(long userId) {
+        return userAccountService.getUserAccountByUserId(userId);
+    }
+
+    @Override
+    public UserAccount topUpUserAccount(long userId, BigDecimal money) {
+        return userAccountService.topUpUserAccount(userId, money);
     }
 }

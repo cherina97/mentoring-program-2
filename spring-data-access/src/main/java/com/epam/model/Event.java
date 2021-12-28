@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -21,6 +22,9 @@ public class Event {
 
     @Column
     private Date date;
+
+    @Column(name = "ticket_price")
+    private BigDecimal ticketPrice;
 
     public Event(String title, Date date) {
         this.title = title;
@@ -49,6 +53,14 @@ public class Event {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public BigDecimal getTicketPrice() {
+        return ticketPrice;
+    }
+
+    public void setTicketPrice(BigDecimal ticketPrice) {
+        this.ticketPrice = ticketPrice;
     }
 
     @Override
