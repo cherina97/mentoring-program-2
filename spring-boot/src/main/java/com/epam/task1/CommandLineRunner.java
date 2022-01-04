@@ -1,4 +1,4 @@
-package task1;
+package com.epam.task1;
 
 import org.springframework.stereotype.Component;
 
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class CommandLineRunner implements org.springframework.boot.CommandLineRunner {
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         System.out.println("Hello, world!");
     }
 }

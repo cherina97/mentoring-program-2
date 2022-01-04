@@ -1,4 +1,4 @@
-package task1;
+package com.epam.task1;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -10,7 +10,7 @@ public class Main {
         Person person = new Programmer(
                 "Max", 25, 1500, "IntelliArts", "C++", 1.5);
 
-        String pathToFile = "module-io-nio/src/main/resources/task1.txt";
+        String pathToFile = "module-io-nio/src/main/resources/com.epam.task1.txt";
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(pathToFile));
         objectOutputStream.writeObject(person);
         objectOutputStream.close();
