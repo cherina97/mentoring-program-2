@@ -1,6 +1,9 @@
 package com.epam.service.impl;
 
+import com.epam.dao.EventDao;
 import com.epam.dao.TicketDao;
+import com.epam.dao.UserDao;
+import com.epam.exception.GlobalApplicationException;
 import com.epam.model.Event;
 import com.epam.model.Ticket;
 import com.epam.model.User;
@@ -21,10 +24,14 @@ import java.util.stream.Collectors;
 @Service
 public class TicketServiceImpl implements TicketService {
 
+    private final UserDao userDao;
+    private final EventDao eventDao;
     private final TicketDao ticketDao;
     private final XmlToObjectConverter converter;
 
-    public TicketServiceImpl(TicketDao ticketDao, XmlToObjectConverter converter) {
+    public TicketServiceImpl(UserDao userDao, EventDao eventDao, TicketDao ticketDao, XmlToObjectConverter converter) {
+        this.userDao = userDao;
+        this.eventDao = eventDao;
         this.ticketDao = ticketDao;
         this.converter = converter;
     }
@@ -34,10 +41,15 @@ public class TicketServiceImpl implements TicketService {
         preloadTickets();
     }
 
+    //
     //todo add validation for user id and event id
     @Override
     public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
         log.info("creating ticket");
+
+        if (userIdOrEventIdIsNotPresent(userId, eventId)) {
+            throw new GlobalApplicationException("Such user id or event id is not present!");
+        }
         Ticket ticket = new TicketImpl(eventId, userId, category, place);
 
         ticket.setId(ticketDao.getAllTickets().stream()
@@ -48,6 +60,14 @@ public class TicketServiceImpl implements TicketService {
         log.info("ticket was created " + ticket);
         return ticketDao.createTicket(ticket);
     }
+
+    private boolean userIdOrEventIdIsNotPresent(long userId, long eventId) {
+        User user = userDao.readUser(userId);
+        Event event = eventDao.readEvent(eventId);
+
+        return user != null && event != null;
+    }
+
 
     @Override
     public List<Ticket> getBookedTickets(User user, int pageSize, int pageNum) {

@@ -62,7 +62,6 @@ public class TemplateEngine {
 
         Map<String, String> inputMap = client.getData();
 
-        //todo add validation
         while (matcher.find()) {
             logger.info("Please enter " + matcher.group(1).toLowerCase() + " :");
             inputMap.put(matcher.group(1), scanner.nextLine());
