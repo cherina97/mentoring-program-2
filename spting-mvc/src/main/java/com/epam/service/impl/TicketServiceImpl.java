@@ -41,8 +41,6 @@ public class TicketServiceImpl implements TicketService {
         preloadTickets();
     }
 
-    //
-    //todo add validation for user id and event id
     @Override
     public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
         log.info("creating ticket");
