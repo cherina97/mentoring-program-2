@@ -1,7 +1,6 @@
 package com.epam.controller;
 
 import com.epam.facade.BookingFacade;
-import lombok.SneakyThrows;
 import com.epam.model.Event;
 import com.epam.model.Ticket;
 import com.epam.model.User;

@@ -8,11 +8,11 @@ import com.epam.model.impl.TicketImpl;
 import com.epam.service.TicketService;
 import com.epam.service.xml.TicketXml;
 import com.epam.service.xml.XmlToObjectConverter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,10 +85,15 @@ public class TicketServiceImpl implements TicketService {
         return ticketDao.getAllTickets();
     }
 
-    @SneakyThrows
     @Override
     public void preloadTickets() {
-        List<TicketXml> ticketsXml = converter.unmarshallXML();
+        List<TicketXml> ticketsXml = null;
+
+        try {
+            ticketsXml = converter.unmarshallXML();
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
 
         log.info("tickets loaded from xml: " + ticketsXml.toString());
         System.out.println(ticketsXml);

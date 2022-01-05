@@ -1,8 +1,6 @@
 package com.epam.controller;
 
 import com.epam.facade.BookingFacade;
-import com.epam.model.User;
-import lombok.SneakyThrows;
 import com.epam.model.Event;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;

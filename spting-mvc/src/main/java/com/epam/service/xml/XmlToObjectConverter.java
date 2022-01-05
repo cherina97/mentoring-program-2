@@ -3,7 +3,6 @@ package com.epam.service.xml;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
-import org.springframework.stereotype.Component;
 
 import javax.xml.transform.stream.StreamSource;
 import java.io.FileInputStream;
