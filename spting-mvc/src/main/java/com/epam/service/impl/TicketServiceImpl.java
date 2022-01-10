@@ -3,7 +3,8 @@ package com.epam.service.impl;
 import com.epam.dao.EventDao;
 import com.epam.dao.TicketDao;
 import com.epam.dao.UserDao;
-import com.epam.exception.GlobalApplicationException;
+import com.epam.exception.EventNotFoundException;
+import com.epam.exception.UserNotFoundException;
 import com.epam.model.Event;
 import com.epam.model.Ticket;
 import com.epam.model.User;
@@ -45,27 +46,33 @@ public class TicketServiceImpl implements TicketService {
     public Ticket bookTicket(long userId, long eventId, int place, Ticket.Category category) {
         log.info("creating ticket");
 
-        if (userIdOrEventIdIsNotPresent(userId, eventId)) {
-            throw new GlobalApplicationException("Such user id or event id is not present!");
+        if (userIdIsNotPresent(userId)) {
+            throw new UserNotFoundException("Such user id is not present!");
         }
-        Ticket ticket = new TicketImpl(eventId, userId, category, place);
 
+        if (eventIdIsNotPresent(eventId)) {
+            throw new EventNotFoundException("Such event id is not present!");
+        }
+
+        Ticket ticket = new TicketImpl(eventId, userId, category, place);
         ticket.setId(ticketDao.getAllTickets().stream()
                 .max(Comparator.comparing(Ticket::getId))
                 .map(Ticket::getId)
                 .orElse(0L) + 1L);
-
         log.info("ticket was created " + ticket);
+
         return ticketDao.createTicket(ticket);
     }
 
-    private boolean userIdOrEventIdIsNotPresent(long userId, long eventId) {
+    private boolean userIdIsNotPresent(long userId) {
         User user = userDao.readUser(userId);
-        Event event = eventDao.readEvent(eventId);
-
-        return user != null && event != null;
+        return user != null;
     }
 
+    private boolean eventIdIsNotPresent(long eventId) {
+        Event event = eventDao.readEvent(eventId);
+        return event != null;
+    }
 
     @Override
     public List<Ticket> getBookedTickets(User user, int pageSize, int pageNum) {
@@ -105,21 +112,18 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void preloadTickets() {
-        List<TicketXml> ticketsXml = null;
-
         try {
-            ticketsXml = converter.unmarshallXML();
+            List<TicketXml> ticketsXml = converter.unmarshallXML();
+            log.info("tickets loaded from xml: " + ticketsXml.toString());
+
+            ticketsXml.forEach(ticket -> bookTicket(
+                    ticket.getUserId(),
+                    ticket.getEventId(),
+                    ticket.getPlace(),
+                    ticket.getCategory()));
+
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error("Error during loading tickets from xml file. " + e.getMessage());
         }
-
-        log.info("tickets loaded from xml: " + ticketsXml.toString());
-        System.out.println(ticketsXml);
-
-        ticketsXml.forEach(ticket -> bookTicket(
-                ticket.getUserId(),
-                ticket.getEventId(),
-                ticket.getPlace(),
-                ticket.getCategory()));
     }
 }
