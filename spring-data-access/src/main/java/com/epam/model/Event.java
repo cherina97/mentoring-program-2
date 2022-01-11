@@ -35,32 +35,36 @@ public class Event {
         return id;
     }
 
-    public void setId(long id) {
+    public Event setId(long id) {
         this.id = id;
+        return this;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public Event setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public Event setDate(Date date) {
         this.date = date;
+        return this;
     }
 
     public BigDecimal getTicketPrice() {
         return ticketPrice;
     }
 
-    public void setTicketPrice(BigDecimal ticketPrice) {
+    public Event setTicketPrice(BigDecimal ticketPrice) {
         this.ticketPrice = ticketPrice;
+        return this;
     }
 
     @Override

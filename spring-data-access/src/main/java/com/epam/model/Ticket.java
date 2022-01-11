@@ -38,40 +38,45 @@ public class Ticket {
         return id;
     }
 
-    public void setId(long id) {
+    public Ticket setId(long id) {
         this.id = id;
+        return this;
     }
 
     public long getEventId() {
         return eventId;
     }
 
-    public void setEventId(long eventId) {
+    public Ticket setEventId(long eventId) {
         this.eventId = eventId;
+        return this;
     }
 
     public long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public Ticket setUserId(long userId) {
         this.userId = userId;
+        return this;
     }
 
     public Category getCategory() {
         return category;
     }
 
-    public void setCategory(Category category) {
+    public Ticket setCategory(Category category) {
         this.category = category;
+        return this;
     }
 
     public int getPlace() {
         return place;
     }
 
-    public void setPlace(int place) {
+    public Ticket setPlace(int place) {
         this.place = place;
+        return this;
     }
 
     @Override

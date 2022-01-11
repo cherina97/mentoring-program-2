@@ -25,24 +25,27 @@ public class UserAccount {
         return id;
     }
 
-    public void setId(long id) {
+    public UserAccount setId(long id) {
         this.id = id;
+        return this;
     }
 
     public long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public UserAccount setUserId(long userId) {
         this.userId = userId;
+        return this;
     }
 
     public BigDecimal getMoney() {
         return money;
     }
 
-    public void setMoney(BigDecimal money) {
+    public UserAccount setMoney(BigDecimal money) {
         this.money = money;
+        return this;
     }
 
     @Override
