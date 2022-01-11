@@ -8,9 +8,9 @@ import com.epam.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -57,6 +57,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Transactional
     @Override
     public User updateUser(User user) {
         log.info("updating user " + user);
@@ -66,15 +67,14 @@ public class UserServiceImpl implements UserService {
             throw new GlobalApplicationException("User with such email is already present");
         }
 
-        Optional<User> userById = userRepository.findById(user.getId());
-        if (userById.isPresent()) {
-            userById.get().setEmail(user.getEmail());
-            userById.get().setName(user.getName());
+        userRepository.findById(user.getId())
+                .ifPresent(userById -> {
+                            userById.setEmail(user.getEmail());
+                            userById.setName(user.getName());
+                        }
+                );
 
-            return userRepository.save(userById.get());
-        } else {
-            throw new GlobalApplicationException("User updating error");
-        }
+        return user;
     }
 
     @Override

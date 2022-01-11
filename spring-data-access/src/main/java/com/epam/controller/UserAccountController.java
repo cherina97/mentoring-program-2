@@ -1,7 +1,6 @@
 package com.epam.controller;
 
 import com.epam.facade.BookingFacade;
-import com.epam.model.User;
 import com.epam.model.UserAccount;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,11 +44,9 @@ public class UserAccountController {
     }
 
     @PostMapping("/topUp")
-    public ModelAndView topUpAnUserAccount(@RequestBody UserAccount userAccount) {
-        ModelAndView modelAndView = new ModelAndView(TEMPLATE);
-        modelAndView.addObject("accountModel",
-                bookingFacade.topUpUserAccount(userAccount.getUserId(), userAccount.getMoney()));
+    public ResponseEntity<HttpStatus> topUpAnUserAccount(@RequestBody UserAccount userAccount) {
+        bookingFacade.topUpUserAccount(userAccount.getUserId(), userAccount.getMoney());
 
-        return modelAndView;
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

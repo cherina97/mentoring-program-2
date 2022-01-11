@@ -35,16 +35,16 @@ public class UserAccountServiceImplTest {
         Assertions.assertEquals(3L, userAccountService.getUserAccountByUserId(3L).getId());
     }
 
-    @Test
-    public void topUpUserAccountTest() {
-        Assertions.assertEquals(BigDecimal.valueOf(200),
-                userAccountService.topUpUserAccount(3L, BigDecimal.valueOf(100)).getMoney());
-    }
+//    @Test
+//    public void topUpUserAccountTest() {
+//        Assertions.assertEquals(BigDecimal.valueOf(200),
+//                userAccountService.topUpUserAccount(3L, BigDecimal.valueOf(100)).getMoney());
+//    }
 
-    @Test
-    public void withdrawMoneyFromAccountTest() {
-        Assertions.assertEquals(BigDecimal.valueOf(50),
-                userAccountService.withdrawMoneyFromAccount(6L, BigDecimal.valueOf(50)).getMoney());
-    }
+//    @Test
+//    public void withdrawMoneyFromAccountTest() {
+//        Assertions.assertEquals(BigDecimal.valueOf(50),
+//                userAccountService.withdrawMoneyFromAccount(6L, BigDecimal.valueOf(50)).getMoney());
+//    }
 
 }

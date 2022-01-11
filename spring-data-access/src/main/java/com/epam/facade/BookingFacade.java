@@ -179,7 +179,6 @@ public interface BookingFacade {
      * @param userId User id
      * @param money  Amount of money to top up into account.
      *
-     * @return UserAccount.
      */
-    UserAccount topUpUserAccount(long userId, BigDecimal money);
+    void topUpUserAccount(long userId, BigDecimal money);
 }

@@ -1,14 +1,17 @@
 package com.epam.service.impl;
 
 import com.epam.exception.EventNotFoundException;
-import com.epam.exception.GlobalApplicationException;
 import com.epam.model.Event;
 import com.epam.repository.EventRepository;
 import com.epam.service.EventService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,20 +65,18 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(event);
     }
 
+    @Transactional
     @Override
     public Event updateEvent(Event event) {
         log.info("updating event " + event);
 
-        Optional<Event> eventById = eventRepository.findById(event.getId());
+        eventRepository.findById(event.getId())
+                .ifPresent(eventById -> {
+                    eventById.setDate(event.getDate());
+                    eventById.setTitle(event.getTitle());
+                });
 
-        if (eventById.isPresent()) {
-            eventById.get().setDate(event.getDate());
-            eventById.get().setTitle(event.getTitle());
-
-            return eventRepository.save(eventById.get());
-        } else {
-            throw new GlobalApplicationException("Event updating error");
-        }
+        return event;
     }
 
     @Override

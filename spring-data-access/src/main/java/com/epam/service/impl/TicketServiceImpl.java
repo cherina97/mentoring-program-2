@@ -1,6 +1,7 @@
 package com.epam.service.impl;
 
-import com.epam.exception.GlobalApplicationException;
+import com.epam.exception.EventNotFoundException;
+import com.epam.exception.UserNotFoundException;
 import com.epam.model.Category;
 import com.epam.model.Event;
 import com.epam.model.Ticket;
@@ -37,9 +38,12 @@ public class TicketServiceImpl implements TicketService {
         log.info("booking ticket");
 
         Optional<Event> eventById = eventRepository.findById(eventId);
+        if (!eventById.isPresent()) {
+            throw new EventNotFoundException("such event id " + eventId + " doesn't exists");
+        }
 
-        if (!userRepository.findById(userId).isPresent() || !eventById.isPresent()) {
-            throw new GlobalApplicationException("such user id " + userId + " or event id " + eventId + " doesn't exists");
+        if (userIdIsNotPresent(userId)) {
+            throw new UserNotFoundException("such user id " + userId + " doesn't exists");
         }
 
         log.info("withdrawing money from account for event " + eventById.get());
@@ -48,6 +52,10 @@ public class TicketServiceImpl implements TicketService {
         Ticket ticket = new Ticket(eventId, userId, category, place);
 
         return ticketRepository.save(ticket);
+    }
+
+    private boolean userIdIsNotPresent(long userId) {
+        return !userRepository.findById(userId).isPresent();
     }
 
     @Override

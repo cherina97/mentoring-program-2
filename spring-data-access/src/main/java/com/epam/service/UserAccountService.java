@@ -12,8 +12,8 @@ public interface UserAccountService {
 
     UserAccount getUserAccountByUserId(long userId);
 
-    UserAccount topUpUserAccount(long userId, BigDecimal money);
+    void topUpUserAccount(long userId, BigDecimal money);
 
-    UserAccount withdrawMoneyFromAccount(long userId, BigDecimal money);
+    void withdrawMoneyFromAccount(long userId, BigDecimal money);
 
 }

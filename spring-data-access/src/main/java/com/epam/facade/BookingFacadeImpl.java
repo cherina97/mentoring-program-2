@@ -139,7 +139,7 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public UserAccount topUpUserAccount(long userId, BigDecimal money) {
-        return userAccountService.topUpUserAccount(userId, money);
+    public void topUpUserAccount(long userId, BigDecimal money) {
+        userAccountService.topUpUserAccount(userId, money);
     }
 }
