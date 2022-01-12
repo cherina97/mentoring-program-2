@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -37,25 +36,21 @@ public class TicketServiceImpl implements TicketService {
     public Ticket bookTicket(long userId, long eventId, int place, Category category) {
         log.info("booking ticket");
 
-        Optional<Event> eventById = eventRepository.findById(eventId);
-        if (!eventById.isPresent()) {
-            throw new EventNotFoundException("such event id " + eventId + " doesn't exists");
-        }
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("such event id " + userId + " doesn't exists"));
 
-        if (userIdIsNotPresent(userId)) {
-            throw new UserNotFoundException("such user id " + userId + " doesn't exists");
-        }
-
-        log.info("withdrawing money from account for event " + eventById.get());
-        userAccountService.withdrawMoneyFromAccount(userId, eventById.get().getTicketPrice());
+        Event eventById = getEventById(eventId);
+        log.info("withdrawing money from account for event " + eventById);
+        userAccountService.withdrawMoneyFromAccount(userId, eventById.getTicketPrice());
 
         Ticket ticket = new Ticket(eventId, userId, category, place);
 
         return ticketRepository.save(ticket);
     }
 
-    private boolean userIdIsNotPresent(long userId) {
-        return !userRepository.findById(userId).isPresent();
+    private Event getEventById(long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException("such event id " + eventId + " doesn't exists"));
     }
 
     @Override

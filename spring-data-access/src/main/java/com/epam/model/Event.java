@@ -1,12 +1,16 @@
 package com.epam.model;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@ToString
+@Getter
+@Setter
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -29,50 +33,5 @@ public class Event {
     public Event(String title, Date date) {
         this.title = title;
         this.date = date;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public Event setId(long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Event setTitle(String title) {
-        this.title = title;
-        return this;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public Event setDate(Date date) {
-        this.date = date;
-        return this;
-    }
-
-    public BigDecimal getTicketPrice() {
-        return ticketPrice;
-    }
-
-    public Event setTicketPrice(BigDecimal ticketPrice) {
-        this.ticketPrice = ticketPrice;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "EventImpl{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", date=" + date +
-                '}';
     }
 }

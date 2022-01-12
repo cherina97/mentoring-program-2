@@ -26,7 +26,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         log.info("creating UserAccount");
 
         if (userAccountRepository.findByUserId(userAccount.getUserId()).isPresent()) {
-            throw new GlobalApplicationException("UserAccount with for this user is already present");
+            throw new GlobalApplicationException("UserAccount for this user id is already present");
         }
         return userAccountRepository.save(userAccount);
     }
@@ -66,7 +66,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         UserAccount userAccount = getUserAccountByUserId(userId);
 
-        if (!(userAccount.getMoney().compareTo(getMoney) > 0)) {
+        if (userAccount.getMoney().compareTo(getMoney) < 0) {
             throw new GlobalApplicationException("Not enough money for booking ticket");
         } else {
             userAccount.setMoney(userAccount.getMoney().subtract(getMoney));

@@ -1,12 +1,16 @@
 package com.epam.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@ToString
+@Getter
+@Setter
+@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -27,42 +31,6 @@ public class User {
     public User(String name, String email) {
         this.name = name;
         this.email = email;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public User setId(long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public User setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public User setEmail(String email) {
-        this.email = email;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return "UserImpl{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 
     @Override

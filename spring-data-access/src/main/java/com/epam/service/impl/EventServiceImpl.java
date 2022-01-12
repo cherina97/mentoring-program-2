@@ -45,10 +45,7 @@ public class EventServiceImpl implements EventService {
 
         return eventRepository.findAll()
                 .stream()
-                .filter(event -> {
-                    int dayOfWeekFromDateEvent = getDayOfWeekFromDate(event.getDate());
-                    return dayOfWeekFromDateEvent == dayOfWeekFromDate;
-                })
+                .filter(event -> getDayOfWeekFromDate(event.getDate()) == dayOfWeekFromDate)
                 .sorted(Comparator.comparing(Event::getId))
                 .collect(Collectors.toList());
     }
@@ -70,13 +67,14 @@ public class EventServiceImpl implements EventService {
     public Event updateEvent(Event event) {
         log.info("updating event " + event);
 
-        eventRepository.findById(event.getId())
-                .ifPresent(eventById -> {
-                    eventById.setDate(event.getDate());
-                    eventById.setTitle(event.getTitle());
-                });
+        return getEventById(event.getId())
+                .setDate(event.getDate())
+                .setTitle(event.getTitle());
+    }
 
-        return event;
+    private Event getEventById(long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new EventNotFoundException("such event id " + eventId + " doesn't exists"));
     }
 
     @Override
