@@ -25,10 +25,14 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccount createUserAccount(UserAccount userAccount) {
         log.info("creating UserAccount");
 
-        if (userAccountRepository.findByUserId(userAccount.getUserId()).isPresent()) {
+        if (userAccountIdIsPresent(userAccount)) {
             throw new GlobalApplicationException("UserAccount for this user id is already present");
         }
         return userAccountRepository.save(userAccount);
+    }
+
+    private boolean userAccountIdIsPresent(UserAccount userAccount) {
+        return userAccountRepository.findByUserId(userAccount.getUserId()).isPresent();
     }
 
     @Override
