@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -26,10 +25,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccount createUserAccount(UserAccount userAccount) {
         log.info("creating UserAccount");
 
-        if (userIsPresent(userAccountRepository.findByUserId(userAccount.getUserId()))) {
+        if (userAccountRepository.findByUserId(userAccount.getUserId()).isPresent()) {
             throw new GlobalApplicationException("UserAccount with for this user is already present");
         }
-
         return userAccountRepository.save(userAccount);
     }
 
@@ -54,26 +52,11 @@ public class UserAccountServiceImpl implements UserAccountService {
     public void topUpUserAccount(long userId, BigDecimal putMoney) {
         log.info("top up account for user id " + userId);
 
-        Optional<UserAccount> userAccountOptional = userAccountRepository.findByUserId(userId);
-
-        if (!userIsPresent(userAccountOptional)) {
-            throw new GlobalApplicationException("UserAccount for this user id doesn't present");
-        }
-
-        if (putMoneyMoreThan0(putMoney)) {
-            userAccountOptional.ifPresent(userAccountById ->
-                    userAccountById.setMoney(userAccountById.getMoney().add(putMoney)));
-        } else {
+        if (putMoney.intValue() > 0) {
             throw new GlobalApplicationException("Put money less or equal 0");
         }
-    }
-
-    private boolean userIsPresent(Optional<UserAccount> userAccountById) {
-        return userAccountById.isPresent();
-    }
-
-    private boolean putMoneyMoreThan0(BigDecimal putMoney) {
-        return putMoney.intValue() > 0;
+        UserAccount userAccount = getUserAccountByUserId(userId);
+        userAccount.setMoney(userAccount.getMoney().add(putMoney));
     }
 
     @Transactional
@@ -81,21 +64,12 @@ public class UserAccountServiceImpl implements UserAccountService {
     public void withdrawMoneyFromAccount(long userId, BigDecimal getMoney) {
         log.info("withdraw money from account for user id " + userId);
 
-        Optional<UserAccount> userAccountById = userAccountRepository.findByUserId(userId);
+        UserAccount userAccount = getUserAccountByUserId(userId);
 
-        if (!userIsPresent(userAccountById)) {
-            throw new GlobalApplicationException("UserAccount for this user id doesn't present");
-
-        } else if (!checkEnoughMoneyForWithdraw(userAccountById.get(), getMoney)) {
+        if (!(userAccount.getMoney().compareTo(getMoney) > 0)) {
             throw new GlobalApplicationException("Not enough money for booking ticket");
-
         } else {
-            UserAccount userAccount = userAccountById.get();
             userAccount.setMoney(userAccount.getMoney().subtract(getMoney));
         }
-    }
-
-    private boolean checkEnoughMoneyForWithdraw(UserAccount userAccount, BigDecimal getMoney) {
-        return userAccount.getMoney().compareTo(getMoney) > 0;
     }
 }
