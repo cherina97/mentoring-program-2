@@ -1,16 +1,14 @@
 package com.epam.service.impl;
 
-import com.epam.exception.EventNotFoundException;
-import com.epam.exception.UserNotFoundException;
 import com.epam.model.Category;
 import com.epam.model.Event;
 import com.epam.model.Ticket;
 import com.epam.model.User;
-import com.epam.repository.EventRepository;
 import com.epam.repository.TicketRepository;
-import com.epam.repository.UserRepository;
+import com.epam.service.EventService;
 import com.epam.service.TicketService;
 import com.epam.service.UserAccountService;
+import com.epam.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +19,14 @@ import java.util.List;
 public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
-    private final UserRepository userRepository;
-    private final EventRepository eventRepository;
+    private final UserService userService;
+    private final EventService eventService;
     private final UserAccountService userAccountService;
 
-    public TicketServiceImpl(TicketRepository ticketRepository, UserRepository userRepository, EventRepository eventRepository, UserAccountService userAccountService) {
+    public TicketServiceImpl(TicketRepository ticketRepository, UserService userService, EventService eventService, UserAccountService userAccountService) {
         this.ticketRepository = ticketRepository;
-        this.userRepository = userRepository;
-        this.eventRepository = eventRepository;
+        this.userService = userService;
+        this.eventService = eventService;
         this.userAccountService = userAccountService;
     }
 
@@ -36,21 +34,14 @@ public class TicketServiceImpl implements TicketService {
     public Ticket bookTicket(long userId, long eventId, int place, Category category) {
         log.info("booking ticket");
 
-        userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("such event id " + userId + " doesn't exists"));
+        userService.getUserById(userId);
+        Event eventById = eventService.getById(eventId);
 
-        Event eventById = getEventById(eventId);
         log.info("withdrawing money from account for event " + eventById);
         userAccountService.withdrawMoneyFromAccount(userId, eventById.getTicketPrice());
 
         Ticket ticket = new Ticket(eventId, userId, category, place);
-
         return ticketRepository.save(ticket);
-    }
-
-    private Event getEventById(long eventId) {
-        return eventRepository.findById(eventId)
-                .orElseThrow(() -> new EventNotFoundException("such event id " + eventId + " doesn't exists"));
     }
 
     @Override

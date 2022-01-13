@@ -69,7 +69,6 @@ public class UserAccountServiceImpl implements UserAccountService {
         log.info("withdraw money from account for user id " + userId);
 
         UserAccount userAccount = getUserAccountByUserId(userId);
-
         if (userAccount.getMoney().compareTo(getMoney) < 0) {
             throw new GlobalApplicationException("Not enough money for booking ticket");
         } else {

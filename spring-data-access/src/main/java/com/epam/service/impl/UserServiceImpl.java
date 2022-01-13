@@ -67,7 +67,6 @@ public class UserServiceImpl implements UserService {
         if (userIsNotUnique(user) && !userById.getEmail().equals(user.getEmail())) {
             throw new GlobalApplicationException("User with such email is already present");
         }
-
         return userById
                 .setEmail(user.getEmail())
                 .setName(user.getName());
@@ -76,7 +75,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long userId) {
         log.info("deleting user by id " + userId);
-
         userRepository.deleteById(userId);
     }
 
